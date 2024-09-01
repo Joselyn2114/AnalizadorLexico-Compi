@@ -616,7 +616,7 @@ public class DemoLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { throw new IllegalArgumentException("La cadena es ilegal > " + yytext());
+            { return new Token(TokenConstant.ERROR, yytext());
             }
             // fall through
           case 5: break;
