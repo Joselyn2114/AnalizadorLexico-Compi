@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
 import java.nio.file.Files;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "compi", mixinStandardHelpOptions = true,version = "0.0.1",
@@ -20,13 +20,24 @@ public class App implements Callable<Integer>
     public Integer call() throws Exception {
 
            if(file!=null){
+               Map<String, TreeMap<String, List<Integer>>> tokenMap = new HashMap<>();
+               int LineNumber = 0;
                BufferedReader bfr = Files.newBufferedReader(file.toPath());
                DemoLexer lexer = new DemoLexer(bfr);
                Token token = lexer.yylex();
                while(token.getTokenType()!= TokenConstant.EOF){
-                   System.out.println(token);
+                   LineNumber++;
+
+                   tokenMap.putIfAbsent(token.getLexema(), new TreeMap<>());
+                   TreeMap<String,List<Integer>> innerMap = tokenMap.get(token.getLexema());
+
+                   innerMap.putIfAbsent(token.getTokenType().name(), new ArrayList<>());
+                   List<Integer> lineNumbers = innerMap.get(token.getTokenType().name());
+                   lineNumbers.add(LineNumber);
+                   //System.out.println(token);
                    token = lexer.yylex();
                }
+               printTokenMap(tokenMap);
            }else {
 
                Scanner scanner = new Scanner(System.in);
@@ -48,5 +59,45 @@ public class App implements Callable<Integer>
     public static void main(String[] args) {
         int exitCode = new CommandLine(new App()).execute(args);
         System.exit(exitCode);
+    }
+
+    private static void printTokenMap(Map<String, TreeMap<String, List<Integer>>> tokenMap) {
+
+           for (Map.Entry<String, TreeMap<String, List<Integer>>> tokenEntry : tokenMap.entrySet()) {
+               String token = tokenEntry.getKey();
+               TreeMap<String, List<Integer>> innerMap = tokenEntry.getValue();
+
+               for (Map.Entry<String, List<Integer>> typeEntry : innerMap.entrySet()) {
+                   String tokenType = typeEntry.getKey();
+                   List<Integer> lineNumbers = typeEntry.getValue();
+                   StringBuilder lineInfo = new StringBuilder();
+                   Map<Integer, Integer> lineCount = new LinkedHashMap<>();
+
+                   for (Integer lineNumber : lineNumbers) {
+                       lineCount.put(lineNumber, lineCount.getOrDefault(lineNumber, 0) + 1);
+                   }
+
+                   for (Map.Entry<Integer, Integer> entry : lineCount.entrySet()) {
+                       lineInfo.append(entry.getKey());
+                       if (entry.getValue() > 1) {
+                           lineInfo.append("(").append(entry.getValue()).append(")");
+                       }
+                       lineInfo.append(", ");
+
+                   }
+
+                   if (lineInfo.length() > 0) {
+                       lineInfo.setLength(lineInfo.length() - 2);
+                   }
+
+                   System.out.print(token);
+                   System.out.print(" - ");
+                   System.out.print(tokenType);
+                   System.out.print(" - ");
+                   System.out.println(lineInfo.toString());
+               }
+
+
+           }
     }
 }
