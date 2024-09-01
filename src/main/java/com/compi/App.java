@@ -21,21 +21,24 @@ public class App implements Callable<Integer>
 
            if(file!=null){
                Map<String, TreeMap<String, List<Integer>>> tokenMap = new HashMap<>();
-               int LineNumber = 0;
+               int LineNumber = 1;
                BufferedReader bfr = Files.newBufferedReader(file.toPath());
                DemoLexer lexer = new DemoLexer(bfr);
                Token token = lexer.yylex();
                while(token.getTokenType()!= TokenConstant.EOF){
-                   LineNumber++;
+                   if(token.getTokenType()==TokenConstant.NEWLINE){
+                       LineNumber++;
+                       token = lexer.yylex();
+                   }else {
+                       tokenMap.putIfAbsent(token.getLexema(), new TreeMap<>());
+                       TreeMap<String, List<Integer>> innerMap = tokenMap.get(token.getLexema());
 
-                   tokenMap.putIfAbsent(token.getLexema(), new TreeMap<>());
-                   TreeMap<String,List<Integer>> innerMap = tokenMap.get(token.getLexema());
-
-                   innerMap.putIfAbsent(token.getTokenType().name(), new ArrayList<>());
-                   List<Integer> lineNumbers = innerMap.get(token.getTokenType().name());
-                   lineNumbers.add(LineNumber);
-                   //System.out.println(token);
-                   token = lexer.yylex();
+                       innerMap.putIfAbsent(token.getTokenType().name(), new ArrayList<>());
+                       List<Integer> lineNumbers = innerMap.get(token.getTokenType().name());
+                       lineNumbers.add(LineNumber);
+                       //System.out.println(token);
+                       token = lexer.yylex();
+                   }
                }
                printTokenMap(tokenMap);
            }else {

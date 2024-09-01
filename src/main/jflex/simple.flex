@@ -28,5 +28,5 @@ newline = [\n]
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }//yytext retorna el texto que hizo concidencia con la expresion regular.
 {digit}+ { return new Token(TokenConstant.NUM, yytext());  }
 {whitespace}+ { /* ignore */}
-{newline} { /* ignore */ }
+{newline} { return new Token(TokenConstant.NEWLINE, yytext()); }
 [^] {return new Token(TokenConstant.ERROR, yytext());}//Para cuando no pueda reconocer una cadena
