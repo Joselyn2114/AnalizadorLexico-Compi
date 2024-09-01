@@ -29,4 +29,4 @@ newline = [\n]
 {digit}+ { return new Token(TokenConstant.NUM, yytext());  }
 {whitespace}+ { /* ignore */}
 {newline} { /* ignore */ }
-[^] {throw new IllegalArgumentException("La cadena es ilegal > " + yytext());}//Para cuando no pueda reconocer una cadena
+[^] {return new Token(TokenConstant.ERROR, yytext());}//Para cuando no pueda reconocer una cadena

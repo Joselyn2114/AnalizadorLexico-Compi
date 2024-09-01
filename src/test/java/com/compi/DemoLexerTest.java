@@ -31,12 +31,11 @@ public class DemoLexerTest {
 
     @Test
     public void noMatch() throws IOException {
-        String testString = "@";
+        String testString = ";lk";
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->  {
-            Reader stringReader = new StringReader(testString);
-            DemoLexer lexer = new DemoLexer(stringReader);
-            Token token = lexer.yylex();//yylex para obtener el token
-        });
+        Reader stringReader = new StringReader(testString);
+        DemoLexer lexer = new DemoLexer(stringReader);
+        Token token = lexer.yylex();//yylex para obtener el token
+        Assertions.assertEquals(TokenConstant.ERROR, token.getTokenType());
     }
 }
