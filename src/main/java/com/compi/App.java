@@ -40,6 +40,8 @@ public class App implements Callable<Integer>
                        token = lexer.yylex();
                    }
                }
+               System.out.println("LISTA DE TOKENS Y OCURRENCIAS");
+               printHeaders();
                printTokenMap(tokenMap);
            }else {
 
@@ -93,14 +95,13 @@ public class App implements Callable<Integer>
                        lineInfo.setLength(lineInfo.length() - 2);
                    }
 
-                   System.out.print(token);
-                   System.out.print(" - ");
-                   System.out.print(tokenType);
-                   System.out.print(" - ");
-                   System.out.println(lineInfo.toString());
+                   System.out.printf("%-20s %-20s %-30s%n", token, tokenType, lineInfo.toString());
                }
-
-
            }
+    }
+
+    private static void printHeaders() {
+        System.out.printf("%-20s %-20s %-30s%n", "Token", "Tipo de Token", "Concurrencias");
+        System.out.println("---------------------------------------------------------------");
     }
 }
