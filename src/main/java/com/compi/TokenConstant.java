@@ -14,7 +14,7 @@ public enum TokenConstant {
 
     // Operadores y delimitadores
     IGUALDAD,            // "=="
-    NO_IGUAL,            // "=="
+    NO_IGUAL,            // "!="
     ADITIVO,             // "+"
     SUSTRACTIVO,         // "-"
     MULTIPLICACION,      // "*"

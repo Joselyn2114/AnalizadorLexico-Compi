@@ -14,6 +14,11 @@ public class Token {
         return tokenType;
     }
 
+    // nuevo
+    public String getTokenText() {
+        return lexema;
+    }
+
     public void setTokenType(TokenConstant tokenType) {
         this.tokenType = tokenType;
     }

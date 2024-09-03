@@ -26,6 +26,11 @@ public class DemoLexerTest {
         Reader stringReader = new StringReader(testString);
         DemoLexer lexer = new DemoLexer(stringReader);
         Token token = lexer.yylex();//yylex para obtener el token
+
+        // Imprimir el tipo de token para depuración
+        System.out.println("Token Type: " + token.getTokenType());
+        System.out.println("Token Text: " + token.getTokenText());
+
         Assertions.assertEquals(TokenConstant.NUM, token.getTokenType());
     }
 

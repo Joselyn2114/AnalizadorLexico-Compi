@@ -39,7 +39,7 @@ newline = [\n]
 
 // Operadores y delimitadores
 "=="        { return new Token(TokenConstant.IGUALDAD, yytext()); }
-"!="        { return new Token(TokenConstant.NOT_EQUAL, yytext()); }
+"!="        { return new Token(TokenConstant.NO_IGUAL, yytext()); }
 "+"         { return new Token(TokenConstant.ADITIVO, yytext()); }
 "-"         { return new Token(TokenConstant.SUSTRACTIVO, yytext()); }
 "*"         { return new Token(TokenConstant.MULTIPLICACION, yytext()); }
@@ -54,6 +54,9 @@ newline = [\n]
 
 // Identificadores
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }
+
+// Entero
+{digit}+ { return new Token(TokenConstant.NUM, yytext());} // Números enteros
 
 // Números
 {digit}+"."{digit}+([eE][-+]?{digit}+) { return new Token(TokenConstant.NUM_CIENTIFICO, yytext()); } // Números científicos
