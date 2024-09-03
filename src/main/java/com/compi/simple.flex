@@ -56,7 +56,11 @@ newline = [\n]
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }
 
 // Entero
-{digit}+ { return new Token(TokenConstant.NUM, yytext());} // Números enteros
+//{digit}+ { return new Token(TokenConstant.NUM, yytext());} // Números enteros
+{digit}+ {
+    System.out.println("Regla activada: Números enteros, valor: " + yytext());
+    return new Token(TokenConstant.NUM, yytext());
+}
 
 // Números
 {digit}+"."{digit}+([eE][-+]?{digit}+) { return new Token(TokenConstant.NUM_CIENTIFICO, yytext()); } // Números científicos
@@ -69,7 +73,11 @@ newline = [\n]
 {newline} { return new Token(TokenConstant.NEWLINE, yytext()); }
 
 // Manejo de errores
-. { return new Token(TokenConstant.ERROR, yytext()); }
+//. { return new Token(TokenConstant.ERROR, yytext()); }
+. {
+    System.out.println("Regla activada: Error, carácter no reconocido: " + yytext());
+    return new Token(TokenConstant.ERROR, yytext());
+}
 
 // Fin de archivo (EOF)
 <<EOF>> { return new Token(TokenConstant.EOF, null); }
