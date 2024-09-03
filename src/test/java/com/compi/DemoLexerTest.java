@@ -36,7 +36,7 @@ public class DemoLexerTest {
 
     @Test
     public void noMatch() throws IOException {
-        String testString = ";lk";
+        String testString = "@";
 
         Reader stringReader = new StringReader(testString);
         DemoLexer lexer = new DemoLexer(stringReader);
