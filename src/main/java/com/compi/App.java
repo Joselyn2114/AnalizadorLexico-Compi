@@ -101,7 +101,7 @@ public class App implements Callable<Integer>
     }
 
     private static void printHeaders() {
-        System.out.printf("%-20s %-20s %-30s%n", "Token", "Tipo de Token", "Concurrencias");
+        System.out.printf("%-20s %-20s %-30s%n", "Token", "Tipo de Token", "Línea");
         System.out.println("---------------------------------------------------------------");
     }
 }

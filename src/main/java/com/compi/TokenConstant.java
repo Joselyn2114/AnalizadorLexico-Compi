@@ -75,6 +75,7 @@ public enum TokenConstant {
     ID,
     NUM,
     NUM_HEX,
+    NUM_OCT,
     STRING,
     CHAR_LITERAL,
     EOF,

@@ -125,6 +125,9 @@ newline = [\n]
     return new Token(TokenConstant.NUM_HEX, yytext());
 }
 
+// Octales
+"0"[0-7]+ { return new Token(TokenConstant.NUM_OCT, yytext()); }
+
 // Espacios en blanco
 {whitespace}+ { /* Ignorar espacios en blanco */ }
 
