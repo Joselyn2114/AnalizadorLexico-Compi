@@ -81,8 +81,14 @@ newline = [\n]
 ">"         { return new Token(TokenConstant.MAYOR, yytext()); }
 "<"         { return new Token(TokenConstant.MENOR, yytext()); }
 "&"         { return new Token(TokenConstant.AND_BINARIO, yytext()); }
-"|"         { return new Token(TokenConstant.OR_BINARIO, yytext());
-
+"|"         { return new Token(TokenConstant.OR_BINARIO, yytext()); }
+"^"         { return new Token(TokenConstant.XOR_BINARIO, yytext()); }
+"%"         { return new Token(TokenConstant.MODULO, yytext()); }
+"<<"        { return new Token(TokenConstant.DESPLAZAMIENTO_IZQ, yytext()); }
+">>"        { return new Token(TokenConstant.DESPLAZAMIENTO_DER, yytext()); }
+"+="        { return new Token(TokenConstant.ASIGNACION_ADITIVA, yytext()); }
+"-="        { return new Token(TokenConstant.ASIGNACION_SUSTRACTIVA, yytext()); }
+"*="        { return new Token(TokenConstant.ASIGNACION_MULTIPLICATIVA, yytext()); }
 
 
 // Identificadores
