@@ -1,15 +1,24 @@
 priscila777 chis123 chis123 chis123 chis123
 684658
-variable9 chis123 chis123
-chis123
-fff999
+
+"Hello, world!" 'c' "#65"
+"String con caracter especial #45"
+'x' "Another \"string\" with escapes."
+
+123456
+0xF1A7
+0137
+3.14159
+2.9E-10
+
+variable9 += 20;
+/* Comentario de bloque que no debería interferir */
+x <= y; // Comentario de línea
+
 @
-variable9
 548
-priscila777
-@
-chis123 priscila777 priscila777 priscila777
-variable9
-priscila777
-chis123
-priscila777
+variable9++
+--counter
+3.5E+8
+
+/* Este comentario está sin cerrar
