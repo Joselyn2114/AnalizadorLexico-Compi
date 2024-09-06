@@ -54,6 +54,11 @@ newline = [\n]
 "sizeof"    { return new Token(TokenConstant.SIZEOF, yytext()); }
 "static"    { return new Token(TokenConstant.STATIC, yytext()); }
 "struct"    { return new Token(TokenConstant.STRUCT, yytext()); }
+"switch"    { return new Token(TokenConstant.SWITCH, yytext()); }
+"typedef"   { return new Token(TokenConstant.TYPEDEF, yytext()); }
+"union"     { return new Token(TokenConstant.UNION, yytext()); }
+"void"      { return new Token(TokenConstant.VOID, yytext()); }
+"volatile"  { return new Token(TokenConstant.VOLATILE, yytext()); }
 
 // Operadores y delimitadores
 "=="        { return new Token(TokenConstant.IGUALDAD, yytext()); }

@@ -29,6 +29,11 @@ public enum TokenConstant {
     SIZEOF,
     STATIC,
     STRUCT,
+    SWITCH,
+    TYPEDEF,
+    UNION,
+    VOID,
+    VOLATILE,
 
     // Operadores y delimitadores
     IGUALDAD,            // "=="
