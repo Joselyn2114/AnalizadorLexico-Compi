@@ -89,7 +89,12 @@ newline = [\n]
 "+="        { return new Token(TokenConstant.ASIGNACION_ADITIVA, yytext()); }
 "-="        { return new Token(TokenConstant.ASIGNACION_SUSTRACTIVA, yytext()); }
 "*="        { return new Token(TokenConstant.ASIGNACION_MULTIPLICATIVA, yytext()); }
-
+"/="        { return new Token(TokenConstant.ASIGNACION_DIVISIVA, yytext()); }
+"%="        { return new Token(TokenConstant.ASIGNACION_MODULO, yytext()); }
+"&&"        { return new Token(TokenConstant.AND_LOGICO, yytext()); }
+"||"        { return new Token(TokenConstant.OR_LOGICO, yytext()); }
+"!"         { return new Token(TokenConstant.NOT_LOGICO, yytext()); }
+"~"         { return new Token(TokenConstant.COMPLEMENTO_BINARIO, yytext()); }
 
 // Identificadores
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }
