@@ -99,16 +99,22 @@ newline = [\n]
 // Identificadores
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }
 
-// Entero
 //{digit}+ { return new Token(TokenConstant.NUM, yytext());} // Números enteros
-{digit}+ {
-    System.out.println("Regla activada: Números enteros, valor: " + yytext());
-    return new Token(TokenConstant.NUM, yytext());
-}
+// {digit}+ {
+//    System.out.println("Regla activada: Números enteros, valor: " + yytext());
+//    return new Token(TokenConstant.NUM, yytext());
+//}
 
 // Números
+{digit}+ { return new Token(TokenConstant.NUM, yytext());} // Números enteros
 {digit}+"."{digit}+([eE][-+]?{digit}+) { return new Token(TokenConstant.NUM_CIENTIFICO, yytext()); } // Números científicos
 {digit}+"."{digit}+ { return new Token(TokenConstant.NUM, yytext()); } // Números decimales
+
+// Hexadecimales
+0[xX][0-9a-fA-F]+ {
+    return new Token(TokenConstant.NUM_HEX, yytext());
+}
+
 
 // Espacios en blanco
 {whitespace}+ { /* Ignorar espacios en blanco */ }
