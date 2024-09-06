@@ -36,6 +36,12 @@ newline = [\n]
 "double"    { return new Token(TokenConstant.DOUBLE, yytext()); }
 "const"     { return new Token(TokenConstant.CONST, yytext()); }
 "unsigned"  { return new Token(TokenConstant.UNSIGNED, yytext()); }
+"auto"      { return new Token(TokenConstant.AUTO, yytext()); }
+"break"     { return new Token(TokenConstant.BREAK, yytext()); }
+"case"      { return new Token(TokenConstant.CASE, yytext()); }
+"continue"  { return new Token(TokenConstant.CONTINUE, yytext()); }
+"default"   { return new Token(TokenConstant.DEFAULT, yytext()); }
+"do"        { return new Token(TokenConstant.DO, yytext()); }
 
 // Operadores y delimitadores
 "=="        { return new Token(TokenConstant.IGUALDAD, yytext()); }
