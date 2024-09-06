@@ -96,6 +96,16 @@ newline = [\n]
 "!"         { return new Token(TokenConstant.NOT_LOGICO, yytext()); }
 "~"         { return new Token(TokenConstant.COMPLEMENTO_BINARIO, yytext()); }
 
+// Literales de cadena
+\"([^\"\\]|\\.)*\" {
+    return new Token(TokenConstant.STRING, yytext());
+}
+
+// Literales de caracteres
+\'([^'\\]|\\.)\' {
+    return new Token(TokenConstant.CHAR_LITERAL, yytext());
+}
+
 // Identificadores
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }
 
@@ -114,7 +124,6 @@ newline = [\n]
 0[xX][0-9a-fA-F]+ {
     return new Token(TokenConstant.NUM_HEX, yytext());
 }
-
 
 // Espacios en blanco
 {whitespace}+ { /* Ignorar espacios en blanco */ }
