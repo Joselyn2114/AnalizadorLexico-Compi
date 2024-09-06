@@ -11,6 +11,19 @@ public enum TokenConstant {
     IF,
     WHILE,
     RETURN,
+    AUTO,
+    BREAK,
+    CASE,
+    CONTINUE,
+    DEFAULT,
+    DO,
+    ELSE,
+    ENUM,
+    EXTERN,
+    FOR,
+    GOTO,
+    LONG,
+    REGISTER,
 
     // Operadores y delimitadores
     IGUALDAD,            // "=="

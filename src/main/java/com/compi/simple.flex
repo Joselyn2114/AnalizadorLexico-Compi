@@ -42,6 +42,14 @@ newline = [\n]
 "continue"  { return new Token(TokenConstant.CONTINUE, yytext()); }
 "default"   { return new Token(TokenConstant.DEFAULT, yytext()); }
 "do"        { return new Token(TokenConstant.DO, yytext()); }
+"else"      { return new Token(TokenConstant.ELSE, yytext()); }
+"enum"      { return new Token(TokenConstant.ENUM, yytext()); }
+"extern"    { return new Token(TokenConstant.EXTERN, yytext()); }
+"for"       { return new Token(TokenConstant.FOR, yytext()); }
+"goto"      { return new Token(TokenConstant.GOTO, yytext()); }
+"long"      { return new Token(TokenConstant.LONG, yytext()); }
+"register"  { return new Token(TokenConstant.REGISTER, yytext()); }
+
 
 // Operadores y delimitadores
 "=="        { return new Token(TokenConstant.IGUALDAD, yytext()); }
