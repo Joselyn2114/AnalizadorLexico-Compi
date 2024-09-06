@@ -24,6 +24,11 @@ public enum TokenConstant {
     GOTO,
     LONG,
     REGISTER,
+    SHORT,
+    SIGNED,
+    SIZEOF,
+    STATIC,
+    STRUCT,
 
     // Operadores y delimitadores
     IGUALDAD,            // "=="

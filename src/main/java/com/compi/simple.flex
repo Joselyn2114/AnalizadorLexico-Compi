@@ -49,7 +49,11 @@ newline = [\n]
 "goto"      { return new Token(TokenConstant.GOTO, yytext()); }
 "long"      { return new Token(TokenConstant.LONG, yytext()); }
 "register"  { return new Token(TokenConstant.REGISTER, yytext()); }
-
+"short"     { return new Token(TokenConstant.SHORT, yytext()); }
+"signed"    { return new Token(TokenConstant.SIGNED, yytext()); }
+"sizeof"    { return new Token(TokenConstant.SIZEOF, yytext()); }
+"static"    { return new Token(TokenConstant.STATIC, yytext()); }
+"struct"    { return new Token(TokenConstant.STRUCT, yytext()); }
 
 // Operadores y delimitadores
 "=="        { return new Token(TokenConstant.IGUALDAD, yytext()); }
