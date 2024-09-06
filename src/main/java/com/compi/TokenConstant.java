@@ -49,6 +49,14 @@ public enum TokenConstant {
     LLAVE_DER,           // "}"
     PUNTO_Y_COMA,        // ";"
     COMA,                // ","
+    INCREMENTO,
+    DECREMENTO,
+    MAYOR_IGUAL,
+    MENOR_IGUAL,
+    MAYOR,
+    MENOR,
+    AND_BINARIO,
+    OR_BINARIO,
 
     // Otros
     ID,

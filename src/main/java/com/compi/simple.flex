@@ -74,6 +74,16 @@ newline = [\n]
 "}"         { return new Token(TokenConstant.LLAVE_DER, yytext()); }
 ";"         { return new Token(TokenConstant.PUNTO_Y_COMA, yytext()); }
 ","         { return new Token(TokenConstant.COMA, yytext()); }
+"++"        { return new Token(TokenConstant.INCREMENTO, yytext()); }
+"--"        { return new Token(TokenConstant.DECREMENTO, yytext()); }
+">="        { return new Token(TokenConstant.MAYOR_IGUAL, yytext()); }
+"<="        { return new Token(TokenConstant.MENOR_IGUAL, yytext()); }
+">"         { return new Token(TokenConstant.MAYOR, yytext()); }
+"<"         { return new Token(TokenConstant.MENOR, yytext()); }
+"&"         { return new Token(TokenConstant.AND_BINARIO, yytext()); }
+"|"         { return new Token(TokenConstant.OR_BINARIO, yytext());
+
+
 
 // Identificadores
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }
