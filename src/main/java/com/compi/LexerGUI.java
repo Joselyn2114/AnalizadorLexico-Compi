@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -24,34 +25,42 @@ public class LexerGUI extends Application {
         StyleClassedTextArea inputArea = new StyleClassedTextArea();
         inputArea.setWrapText(true);
         inputArea.setParagraphGraphicFactory(LineNumberFactory.get(inputArea));
-        inputArea.setPrefSize(800, 300);  // tamaño  del area de entrada
+        inputArea.setPrefSize(600, 600);  // Ajusta el tamaño preferido del área de entrada
 
         Button analyzeButton = new Button("Analizar");
+        analyzeButton.setMaxWidth(Double.MAX_VALUE); // Botón ocupará todo el ancho disponible
+
         TextArea outputArea = new TextArea();
         outputArea.setEditable(false);
-        outputArea.setPrefSize(800, 300);  //  tamaño  del area de salida
+        outputArea.setPrefSize(600, 600);  // Ajusta el tamaño preferido del área de salida
 
         // Resaltar sintaxis mientras se escribe
         inputArea.textProperty().addListener((obs, oldText, newText) -> {
             applyHighlighting(inputArea, newText);
         });
 
-        // Acción del  "Analizar"
+        // Acción del botón "Analizar"
         analyzeButton.setOnAction(event -> {
             String inputText = inputArea.getText();
             outputArea.clear(); // Limpiar la salida anterior
             analyzeText(inputText, outputArea);
         });
 
-        // Organizar los componentes en un layout
-        VBox vbox = new VBox(10, inputArea, analyzeButton, outputArea);
-        vbox.setPrefSize(900, 700);  // Ajusta el tamaño preferido del VBox
+        // Crear layout vertical para el área de entrada
+        VBox inputBox = new VBox(10, inputArea, analyzeButton);
+        inputBox.setPrefSize(600, 650); // Tamaño preferido del layout vertical
 
-        Scene scene = new Scene(vbox, 900, 700);  // Ajusta el tamaño de la escena
+        // Crear SplitPane para organizar las ventanas en paralelo
+        SplitPane splitPane = new SplitPane();
+        splitPane.getItems().addAll(inputBox, outputArea);
+        splitPane.setDividerPositions(0.5); // Dividir al 50%
+
+        // Crear la escena
+        Scene scene = new Scene(splitPane, 1200, 700);  // Tamaño más grande para más líneas visibles
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(900);  // Ajusta el tamaño mínimo de la ventana
+        primaryStage.setMinWidth(1200);  // Ajusta el tamaño mínimo de la ventana
         primaryStage.setMinHeight(700);
         primaryStage.show();
     }
@@ -60,27 +69,48 @@ public class LexerGUI extends Application {
     private void applyHighlighting(StyleClassedTextArea area, String text) {
         area.clearStyle(0, text.length());
 
-        // Expresiones regulares para diferentes tipos de tokens
-        Pattern pattern = Pattern.compile("\\b(\\d+\\.?\\d*|\\w+|[-+*/=;])\\b");
+        // Expresiones regulares para diferentes elementos de C
+        String keywordsPattern = "\\b(int|float|double|char|void|if|else|while|for|return|struct|typedef|switch|case|break|continue|default)\\b";
+        String commentPattern = "//[^\n]*|/\\*.*?\\*/";
+        String stringPattern = "\"([^\"\\\\]|\\\\.)*\"";
+        String charPattern = "'([^'\\\\]|\\\\.)*'";
+        String numberPattern = "\\b\\d+\\.?\\d*\\b";
+        String preprocessorPattern = "#[a-zA-Z_]+";
+        String operatorPattern = "[+\\-*/=<>!&|%^~]";
+        String identifierPattern = "\\b[A-Za-z_][A-Za-z0-9_]*\\b";
+
+        // Combina todas las expresiones regulares
+        Pattern pattern = Pattern.compile(
+                "(?<KEYWORD>" + keywordsPattern + ")"
+                        + "|(?<COMMENT>" + commentPattern + ")"
+                        + "|(?<STRING>" + stringPattern + ")"
+                        + "|(?<CHAR>" + charPattern + ")"
+                        + "|(?<NUMBER>" + numberPattern + ")"
+                        + "|(?<PREPROCESSOR>" + preprocessorPattern + ")"
+                        + "|(?<OPERATOR>" + operatorPattern + ")"
+                        + "|(?<IDENTIFIER>" + identifierPattern + ")"
+        );
+
         Matcher matcher = pattern.matcher(text);
 
         while (matcher.find()) {
-            String token = matcher.group();
-            String styleClass = getStyleClassForToken(token);
-            area.setStyleClass(matcher.start(), matcher.end(), styleClass);
-        }
-    }
-
-    // Método para determinar la clase de estilo CSS basado en el token
-    private String getStyleClassForToken(String token) {
-        if (token.matches("\\d+\\.?\\d*")) {
-            return "number"; // Números
-        } else if (token.matches("\\w+")) {
-            return "identifier"; // Identificadores
-        } else if (token.matches("[-+*/=;]")) {
-            return "operator"; // Operadores
-        } else {
-            return "error"; // Otros como errores
+            if (matcher.group("KEYWORD") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "keyword");
+            } else if (matcher.group("COMMENT") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "comment");
+            } else if (matcher.group("STRING") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "string");
+            } else if (matcher.group("CHAR") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "char");
+            } else if (matcher.group("NUMBER") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "number");
+            } else if (matcher.group("PREPROCESSOR") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "preprocessor");
+            } else if (matcher.group("OPERATOR") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "operator");
+            } else if (matcher.group("IDENTIFIER") != null) {
+                area.setStyleClass(matcher.start(), matcher.end(), "identifier");
+            }
         }
     }
 
