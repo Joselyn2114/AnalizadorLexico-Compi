@@ -1,0 +1,15 @@
+.number {
+    -fx-fill: green;
+}
+
+.identifier {
+    -fx-fill: blue;
+}
+
+.operator {
+    -fx-fill: purple;
+}
+
+.error {
+    -fx-fill: red;
+}
