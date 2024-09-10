@@ -17,14 +17,19 @@ newline = [\n]
 %%
 // Parte 3: REGLAS LÉXICAS
 
-// Comentarios de línea: coincidir desde // hasta el final de la línea, luego hacer nada
-"//".*                                    { /* DO NOTHING */ }
+// Comentarios de línea: coincide desde // hasta el final de la línea
+"//".* { /* Ignorar comentario de línea */ }
 
-// Comentarios de bloque: coincidir secuencias de caracteres terminando con uno o más '*' seguidos de '/'
-"/\\*([^*]|\\*+[^/*])*\\*+/"              { /* DO NOTHING */ }
+// Comentarios de bloque: coincide desde /* hasta */
+"/*"[^*]*"*"+([^/*][^*]*"*"+)*"/" { /* Ignorar comentario de bloque */ }
 
-// Comentario sin terminar: coincidir y producir un error fatal
-"/\\*"                                    { System.err.println("Error: Comentario sin terminar."); }
+// TODO Comentario de bloque sin terminar: coincide con /* que no está cerrado
+"/*"([^*]|"*"+[^/*])* {
+    System.err.println("Error: Comentario sin terminar.");
+    return new Token(TokenConstant.ERROR, yytext());
+}
+// Directivas de preprocesador: coincidir desde # hasta el final de la línea
+"#".* { /* Ignorar directiva de preprocesador */ }
 
 // Palabras reservadas de C
 "int"       { return new Token(TokenConstant.INT, yytext()); }
