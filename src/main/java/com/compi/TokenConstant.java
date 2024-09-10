@@ -35,6 +35,10 @@ public enum TokenConstant {
     VOID,
     VOLATILE,
 
+    // Comentarios
+    COMENTARIO_LINEA,
+    COMENTARIO_BLOQUE,
+
     // Operadores y delimitadores
     IGUALDAD,            // "=="
     NO_IGUAL,            // "!="

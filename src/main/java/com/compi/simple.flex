@@ -18,13 +18,16 @@ newline = [\n]
 // Parte 3: REGLAS LÉXICAS
 
 // Comentarios de línea: coincidir desde // hasta el final de la línea, luego hacer nada
-"//".*                                    { /* DO NOTHING */ }
+"//".* { return new Token(TokenConstant.COMENTARIO_LINEA, yytext()); }
 
 // Comentarios de bloque: coincidir secuencias de caracteres terminando con uno o más '*' seguidos de '/'
-"/\\*([^*]|\\*+[^/*])*\\*+/"              { /* DO NOTHING */ }
+// "/\\*([^*]|\\*+[^/*])*\\*+/"              { /* DO NOTHING */ }
+"/\\*([^*]|(\\*+[^*/]))*\\*+/" { return new Token(TokenConstant.COMENTARIO_BLOQUE, yytext()); }
 
 // Comentario sin terminar: coincidir y producir un error fatal
 "/\\*"                                    { System.err.println("Error: Comentario sin terminar."); }
+
+"#".* { /* Ignorar directiva de preprocesador */ }
 
 // Palabras reservadas de C
 "int"       { return new Token(TokenConstant.INT, yytext()); }
@@ -108,6 +111,8 @@ newline = [\n]
 
 // Identificadores
 {letter}({letter}|{digit})* { return new Token(TokenConstant.ID, yytext()); }
+
+
 
 //{digit}+ { return new Token(TokenConstant.NUM, yytext());} // Números enteros
 // {digit}+ {
