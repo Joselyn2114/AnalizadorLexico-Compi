@@ -17,6 +17,9 @@ import java.util.regex.Pattern;
 
 public class LexerGUI extends Application {
 
+    private Scene scene;
+    private boolean isDarkMode = false; // Estado inicial del modo oscuro
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Analizador Léxico");
@@ -25,14 +28,19 @@ public class LexerGUI extends Application {
         StyleClassedTextArea inputArea = new StyleClassedTextArea();
         inputArea.setWrapText(true);
         inputArea.setParagraphGraphicFactory(LineNumberFactory.get(inputArea));
-        inputArea.setPrefSize(600, 600);  // Ajusta el tamaño preferido del área de entrada
+        inputArea.setPrefSize(600, 600);  // área de entrada
 
         Button analyzeButton = new Button("Analizar");
-        analyzeButton.setMaxWidth(Double.MAX_VALUE); // Botón ocupará todo el ancho disponible
+        analyzeButton.setMaxWidth(Double.MAX_VALUE); // Botón todo el ancho disponible
 
         TextArea outputArea = new TextArea();
         outputArea.setEditable(false);
-        outputArea.setPrefSize(600, 600);  // Ajusta el tamaño preferido del área de salida
+        outputArea.setPrefSize(600, 600);  //  área de salida
+
+        // Botón para activar/desactivar el modo oscuro
+        ToggleButton darkModeButton = new ToggleButton("Modo Oscuro");
+        darkModeButton.setMaxWidth(Double.MAX_VALUE); // todo el ancho disponible
+        darkModeButton.setOnAction(event -> toggleDarkMode());
 
         // Resaltar sintaxis mientras se escribe
         inputArea.textProperty().addListener((obs, oldText, newText) -> {
@@ -47,8 +55,8 @@ public class LexerGUI extends Application {
         });
 
         // Crear layout vertical para el área de entrada
-        VBox inputBox = new VBox(10, inputArea, analyzeButton);
-        inputBox.setPrefSize(600, 650); // Tamaño preferido del layout vertical
+        VBox inputBox = new VBox(10, inputArea, analyzeButton, darkModeButton);
+        inputBox.setPrefSize(600, 650); //  layout vertical
 
         // Crear SplitPane para organizar las ventanas en paralelo
         SplitPane splitPane = new SplitPane();
@@ -56,13 +64,32 @@ public class LexerGUI extends Application {
         splitPane.setDividerPositions(0.5); // Dividir al 50%
 
         // Crear la escena
-        Scene scene = new Scene(splitPane, 1200, 700);  // Tamaño más grande para más líneas visibles
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        scene = new Scene(splitPane, 1200, 700);  // Tamaño más grande para más líneas visibles
+        loadStyleSheet(); // Cargar estilos iniciales
 
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(1200);  // Ajusta el tamaño mínimo de la ventana
         primaryStage.setMinHeight(700);
         primaryStage.show();
+    }
+
+    // Método para alternar el modo oscuro
+    private void toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        loadStyleSheet();
+    }
+
+    // Método para cargar el archivo CSS correcto
+    private void loadStyleSheet() {
+        scene.getStylesheets().clear(); // Limpiar los estilos existentes
+        String stylesheet = isDarkMode ? "dark-theme.css" : "light-theme.css";
+        java.net.URL resource = getClass().getClassLoader().getResource(stylesheet);
+
+        if (resource != null) {
+            scene.getStylesheets().add(resource.toExternalForm());
+        } else {
+            System.err.println("No se pudo encontrar el archivo CSS: " + stylesheet);
+        }
     }
 
     // Método para aplicar resaltado de sintaxis

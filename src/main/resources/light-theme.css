@@ -1,0 +1,48 @@
+.root {
+    -fx-background-color: #FFFFFF; /* Fondo blanco */
+}
+
+.style-classed-text-area, .text-area {
+    -fx-background-color: #FFFFFF; /* Fondo blanco */
+    -fx-text-fill: #000000; /* Texto en negro */
+    -fx-font-family: Consolas, Monaco, 'Courier New', monospace;
+}
+
+.button {
+    -fx-background-color: #E0E0E0; /* Fondo gris claro */
+    -fx-text-fill: #000000; /* Texto negro */
+    -fx-border-color: #B0B0B0; /* Borde gris */
+}
+
+/* Estilos de resaltado de sintaxis */
+.keyword {
+    -fx-fill: #0000FF; /* Azul para palabras clave */
+}
+
+.comment {
+    -fx-fill: #008000; /* Verde para comentarios */
+}
+
+.string {
+    -fx-fill: #B22222; /* Rojo para cadenas */
+}
+
+.char {
+    -fx-fill: #A52A2A; /* Marrón para caracteres */
+}
+
+.number {
+    -fx-fill: #FF00FF; /* Magenta para números */
+}
+
+.preprocessor {
+    -fx-fill: #000080; /* Azul oscuro para preprocesadores */
+}
+
+.operator {
+    -fx-fill: #000000; /* Negro para operadores */
+}
+
+.identifier {
+    -fx-fill: #000000; /* Negro para identificadores */
+}
