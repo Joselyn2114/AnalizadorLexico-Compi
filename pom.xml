@@ -48,7 +48,8 @@
       <artifactId>junit-jupiter-params</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- Dependencias de JavaFX con una versión específica estable -->
+
+    <!-- Dependencias de JavaFX -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -58,6 +59,13 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>17.0.2</version>
+    </dependency>
+
+    <!-- Dependencia para CUP -->
+    <dependency>
+      <groupId>java-cup</groupId>
+      <artifactId>java-cup</artifactId>
+      <version>11b</version>
     </dependency>
   </dependencies>
 
@@ -114,6 +122,7 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- Plugin de JFlex para generar el lexer -->
       <plugin>
         <groupId>de.jflex</groupId>
         <artifactId>jflex-maven-plugin</artifactId>
@@ -126,6 +135,36 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Plugin de CUP para generar el parser -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>generate-parser</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>java_cup.Main</mainClass>
+              <arguments>
+                <argument>-destdir</argument>
+                <argument>${project.build.directory}/generated-sources/cup</argument>
+                <argument>-parser</argument>
+                <argument>Parser</argument>
+                <argument>-symbols</argument>
+                <argument>sym</argument>
+                <argument>src/main/jflex/parser.cup</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Plugin de Maven Assembly para empaquetar el proyecto -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>

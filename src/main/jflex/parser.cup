@@ -1,0 +1,69 @@
+// Definición de la estructura del archivo CUP para el parser
+
+// 1. Definición del paquete
+package com.compi;
+
+// 2. Importación de clases necesarias
+import java_cup.runtime.*;
+import com.compi.Token;
+import com.compi.TokenConstant;
+
+// 3. Configuración del parser y del scanner
+parser code {:
+    public static void main(String[] args) throws Exception {
+        // Se utiliza DemoLexer como el scanner
+        DemoLexer lexer = new DemoLexer(System.in);
+        Parser parser = new Parser(lexer);
+        parser.parse();
+    }
+:};
+
+// 4. Importación del scanner (generado con JFlex)
+scan with DemoLexer;
+
+// 5. Definición de los terminales (tokens) de acuerdo al analizador léxico
+terminal INT, FLOAT, CHAR, IF, WHILE, RETURN, DOUBLE, CONST, UNSIGNED, AUTO, BREAK;
+terminal CASE, CONTINUE, DEFAULT, DO, ELSE, ENUM, EXTERN, FOR, GOTO, LONG, REGISTER;
+terminal SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, VOID, VOLATILE;
+terminal IGUALDAD, NO_IGUAL, ADITIVO, SUSTRACTIVO, MULTIPLICACION, DIVISION, ASIGNACION;
+terminal PARENTESIS_IZQ, PARENTESIS_DER, LLAVE_IZQ, LLAVE_DER, PUNTO_Y_COMA, COMA;
+terminal INCREMENTO, DECREMENTO, MAYOR_IGUAL, MENOR_IGUAL, MAYOR, MENOR, AND_BINARIO;
+terminal OR_BINARIO, XOR_BINARIO, MODULO, DESPLAZAMIENTO_IZQ, DESPLAZAMIENTO_DER;
+terminal ASIGNACION_ADITIVA, ASIGNACION_SUSTRACTIVA, ASIGNACION_MULTIPLICATIVA;
+terminal ASIGNACION_DIVISIVA, ASIGNACION_MODULO, AND_LOGICO, OR_LOGICO, NOT_LOGICO;
+terminal COMPLEMENTO_BINARIO, STRING, CHAR_LITERAL, ID, NUM, NUM_CIENTIFICO;
+terminal NUM_HEX, NUM_OCT, NEWLINE, ERROR, EOF;
+
+// 6. Definición de no terminales para la gramática
+non terminal Object program, declaration, expression;
+
+// 7. Precedencia de operadores (opcional, según gramática)
+precedence left ASIGNACION;
+precedence left OR_LOGICO;
+precedence left AND_LOGICO;
+precedence left IGUALDAD, NO_IGUAL;
+precedence left MAYOR, MENOR, MAYOR_IGUAL, MENOR_IGUAL;
+precedence left ADITIVO, SUSTRACTIVO;
+precedence left MULTIPLICACION, DIVISION, MODULO;
+precedence right NOT_LOGICO;
+
+// 8. Reglas gramaticales y acciones semánticas
+/* Estructura básica de un programa */
+program ::= declaration
+            {: System.out.println("Programa reconocido."); :};
+
+/* Declaración */
+declaration ::=
+      INT ID PUNTO_Y_COMA {: System.out.println("Declaración de int."); :}
+    | FLOAT ID PUNTO_Y_COMA {: System.out.println("Declaración de float."); :}
+    | CHAR ID PUNTO_Y_COMA {: System.out.println("Declaración de char."); :}
+    ;
+
+/* Expresión (ejemplo básico) */
+expression ::=
+      ID ASIGNACION expression {: System.out.println("Asignación."); :}
+    | expression ADITIVO expression {: System.out.println("Suma."); :}
+    | expression MULTIPLICACION expression {: System.out.println("Multiplicación."); :}
+    | NUM {: System.out.println("Número."); :}
+    | PARENTESIS_IZQ expression PARENTESIS_DER {: System.out.println("Paréntesis."); :}
+    ;
