@@ -27,17 +27,19 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Picocli for CLI options -->
     <dependency>
       <groupId>info.picocli</groupId>
       <artifactId>picocli</artifactId>
       <version>4.7.6</version>
     </dependency>
+    <!-- RichTextFX for JavaFX GUI components -->
     <dependency>
       <groupId>org.fxmisc.richtext</groupId>
       <artifactId>richtextfx</artifactId>
       <version>0.10.8</version>
     </dependency>
-
+    <!-- JUnit for testing -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -48,8 +50,7 @@
       <artifactId>junit-jupiter-params</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <!-- Dependencias de JavaFX -->
+    <!-- JavaFX dependencies -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -60,11 +61,15 @@
       <artifactId>javafx-fxml</artifactId>
       <version>17.0.2</version>
     </dependency>
-
-    <!-- Dependencia para CUP -->
+    <!-- CUP dependencies -->
     <dependency>
       <groupId>java-cup</groupId>
       <artifactId>java-cup</artifactId>
+      <version>11b</version>
+    </dependency>
+    <dependency>
+      <groupId>java-cup</groupId>
+      <artifactId>java-cup-runtime</artifactId>
       <version>11b</version>
     </dependency>
   </dependencies>
@@ -156,7 +161,7 @@
                 <argument>-parser</argument>
                 <argument>Parser</argument>
                 <argument>-symbols</argument>
-                <argument>sym</argument>
+                <argument>Sym</argument>
                 <argument>src/main/jflex/parser.cup</argument>
               </arguments>
             </configuration>
