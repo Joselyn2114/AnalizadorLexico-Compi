@@ -1,0 +1,23 @@
+package com.compi;
+
+/* Terminales */
+terminal PLUS, MINUS, MULT, DIV, NUMBER;
+
+/* No terminales */
+non terminal expr_list, expr;
+
+/* Precedencias */
+precedence left PLUS, MINUS;
+precedence left MULT, DIV;
+
+/* Reglas de Producción */
+expr_list ::= expr_list expr
+            | expr;
+
+expr ::= expr PLUS expr
+       | expr MINUS expr
+       | expr MULT expr
+       | expr DIV expr
+       | NUMBER
+       | error
+         {: System.err.println("Error de sintaxis, token inesperado."); :};
