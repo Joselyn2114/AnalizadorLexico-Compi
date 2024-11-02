@@ -1,0 +1,112 @@
+package com.compi;
+
+/* Terminales */
+terminal INT, FLOAT, CHAR, UNSIGNED, CONST, DOUBLE, IF, WHILE, RETURN, AUTO, BREAK, CASE, CONTINUE, DEFAULT, DO, ELSE, ENUM, EXTERN, FOR, GOTO, LONG, REGISTER, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, VOID, VOLATILE;
+terminal IGUALDAD, NO_IGUAL, ADITIVO, SUSTRACTIVO, MULTIPLICACION, DIVISION, ASIGNACION, PARENTESIS_IZQ, PARENTESIS_DER, LLAVE_IZQ, LLAVE_DER, PUNTO_Y_COMA, COMA, INCREMENTO, DECREMENTO, MAYOR_IGUAL, MENOR_IGUAL, MAYOR, MENOR;
+terminal AND_BINARIO, OR_BINARIO, XOR_BINARIO, MODULO, DESPLAZAMIENTO_IZQ, DESPLAZAMIENTO_DER, ASIGNACION_ADITIVA, ASIGNACION_SUSTRACTIVA, ASIGNACION_MULTIPLICATIVA, ASIGNACION_DIVISIVA, ASIGNACION_MODULO, AND_LOGICO, OR_LOGICO, NOT_LOGICO, COMPLEMENTO_BINARIO;
+terminal ID, NUM, NUM_HEX, NUM_OCT, STRING, CHAR_LITERAL, NEWLINE, ERROR, NUM_CIENTIFICO;
+terminal READ, WRITE, COLON;
+
+/* No terminales */
+non terminal program, global_decl_list, global_decl, func_decl_list, func_decl, stmt, stmt_list, expr, type, id_list, param_list, param, param_opt, else_opt, case_list, default_opt, return_expr, write_expr_opt;
+
+/* Precedencias */
+precedence left ELSE;  // Establece la precedencia del ELSE para resolver conflictos
+precedence left IGUALDAD, NO_IGUAL;
+precedence left MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL;
+precedence right ASIGNACION;
+precedence left ADITIVO, SUSTRACTIVO;
+precedence left MULTIPLICACION, DIVISION, MODULO;
+
+/* Reglas de Producción */
+program ::= global_decl_list func_decl_list;
+
+global_decl_list ::= global_decl_list global_decl
+                   | /* vacío */ ;
+
+global_decl ::= type ID id_list PUNTO_Y_COMA;
+
+id_list ::= COMA ID id_list
+          | /* vacío */ ;
+
+func_decl_list ::= func_decl func_decl_list
+                 | /* vacío */ ;
+
+func_decl ::= type ID PARENTESIS_IZQ param_opt PARENTESIS_DER LLAVE_IZQ stmt_list LLAVE_DER;
+
+param_opt ::= param_list
+            | /* vacío */ ;
+
+param_list ::= param_list COMA param
+             | param;
+
+param ::= type ID;
+
+type ::= INT
+       | FLOAT
+       | CHAR
+       | DOUBLE
+       | LONG
+       | SHORT
+       | VOID
+       | UNSIGNED
+       | CONST
+       | SIGNED
+       | ENUM
+       | STRUCT
+       | TYPEDEF
+       | UNION
+       | AUTO
+       | VOLATILE;
+
+/* Lista de declaraciones */
+stmt_list ::= stmt_list stmt
+            | /* vacío */ ;
+
+/* Definición de las declaraciones */
+stmt ::= expr PUNTO_Y_COMA
+       | IF PARENTESIS_IZQ expr PARENTESIS_DER stmt else_opt %prec ELSE
+       | WHILE PARENTESIS_IZQ expr PARENTESIS_DER stmt
+       | DO stmt WHILE PARENTESIS_IZQ expr PARENTESIS_DER PUNTO_Y_COMA
+       | FOR PARENTESIS_IZQ expr PUNTO_Y_COMA expr PUNTO_Y_COMA expr PARENTESIS_DER stmt
+       | SWITCH PARENTESIS_IZQ expr PARENTESIS_DER LLAVE_IZQ case_list default_opt LLAVE_DER
+       | RETURN return_expr PUNTO_Y_COMA
+       | READ PARENTESIS_IZQ ID PARENTESIS_DER PUNTO_Y_COMA
+       | WRITE PARENTESIS_IZQ expr write_expr_opt PARENTESIS_DER PUNTO_Y_COMA
+       | BREAK PUNTO_Y_COMA
+       | CONTINUE PUNTO_Y_COMA;
+
+/* Expresión else opcional */
+else_opt ::= ELSE stmt
+           | /* vacío */;
+
+/* Lista de casos en switch-case */
+case_list ::= case_list CASE expr COLON stmt_list
+            | /* vacío */ ;
+
+/* Caso por defecto en switch-case */
+default_opt ::= DEFAULT COLON stmt_list
+              | /* vacío */ ;
+
+/* Expresión de retorno opcional */
+return_expr ::= expr
+              | /* vacío */ ;
+
+/* Expresiones adicionales en WRITE */
+write_expr_opt ::= COMA expr write_expr_opt
+                 | /* vacío */;
+
+/* Expresiones */
+expr ::= expr ADITIVO expr
+       | expr SUSTRACTIVO expr
+       | expr MULTIPLICACION expr
+       | expr DIVISION expr
+       | expr MENOR expr
+       | expr MAYOR expr
+       | expr MENOR_IGUAL expr
+       | expr MAYOR_IGUAL expr
+       | expr IGUALDAD expr
+       | expr NO_IGUAL expr
+       | ID ASIGNACION expr
+       | NUM
+       | ID;
