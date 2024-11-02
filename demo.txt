@@ -5,5 +5,8 @@ int main() {
     } else {
         read(x);
     }
+    // Error léxico
     return 0;
 }
+@ // Carácter no reconocido
+/* Comentario sin cerrar

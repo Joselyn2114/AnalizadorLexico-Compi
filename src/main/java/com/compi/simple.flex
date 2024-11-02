@@ -2,12 +2,27 @@
 package com.compi;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
 
 %%
 
 // Parte 2: OPCIONES Y DECLARACIONES
 %public
 %class DemoLexer
+%{
+    private ArrayList<String> lexicalErrors = new ArrayList<>();
+    private int lineNumber = 1;
+
+    // Método para acceder a los errores léxicos
+    public ArrayList<String> getLexicalErrors() {
+        return lexicalErrors;
+    }
+
+    // Método para incrementar el número de línea
+    private void incrementLineNumber() {
+        lineNumber++;
+    }
+%}
 
 // Macros con expresiones regulares para usar en reglas
 digit = [0-9]
@@ -27,7 +42,10 @@ newline = [\n]
 "/\\*([^*]|\\*+[^/*])*\\*+/"              { /* DO NOTHING */ }
 
 // Comentario sin terminar
-"/\\*"                                    { System.err.println("Error: Comentario sin terminar."); return new Symbol(sym.ERROR, yytext()); }
+"/\\*" {
+    lexicalErrors.add("Error: Comentario sin terminar en línea " + lineNumber);
+    return new Symbol(sym.ERROR, yytext());
+}
 
 // Palabras reservadas de C
 "int"       { return new Symbol(sym.INT, yytext()); }
@@ -124,11 +142,11 @@ newline = [\n]
 {whitespace}+ { /* Ignorar espacios en blanco */ }
 
 // Nueva línea
-{newline} { return new Symbol(sym.NEWLINE, yytext()); }
+{newline} { incrementLineNumber(); return new Symbol(sym.NEWLINE, yytext()); }
 
-// Manejo de errores
+// Manejo de errores léxicos (caracteres no reconocidos)
 . {
-    System.out.println("Error: carácter no reconocido: " + yytext());
+    lexicalErrors.add("Error léxico en línea " + lineNumber + ": símbolo no reconocido '" + yytext() + "'");
     return new Symbol(sym.ERROR, yytext());
 }
 
