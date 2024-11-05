@@ -22,10 +22,11 @@ public class App implements Callable<Integer> {
             // Lee el archivo de entrada
             BufferedReader bfr = Files.newBufferedReader(file.toPath());
             DemoLexer lexer = new DemoLexer(bfr);
-            Symbol token = lexer.next_token();
+            Symbol token = lexer.yylex();
+
             while (token.sym != sym.EOF) {
                 System.out.println("Token: " + token.sym + " Lexema: " + token.value);
-                token = lexer.next_token();
+                token = lexer.yylex();
             }
 
             // Iniciar el parser con el lexer

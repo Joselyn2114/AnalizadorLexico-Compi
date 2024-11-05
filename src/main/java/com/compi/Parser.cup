@@ -1,23 +1,81 @@
 package com.compi;
 
-/* Terminales */
-terminal PLUS, MINUS, MULT, DIV, NUMBER;
+import java_cup.runtime.Symbol;
 
-/* No terminales */
-non terminal expr_list, expr;
+/* Parser error handling code */
+parser code {:
+    public void report_error(String message, Object info) {
+        if (info instanceof Symbol) {
+            Symbol symbol = (Symbol) info;
+            System.err.println("Error de sintaxis en línea " + symbol.left + ", columna " + symbol.right + ": " + message);
+        } else {
+            System.err.println("Error de sintaxis: " + message);
+        }
+    }
+
+    public void syntax_error(Symbol cur_token) {
+        System.err.println("Error de sintaxis en línea " + cur_token.left + ", columna " + cur_token.right + ": token inesperado '" + cur_token.value + "'");
+    }
+:};
+
+/* Palabras reservadas */
+terminal INT, FLOAT, CHAR, UNSIGNED, CONST, DOUBLE, IF, WHILE, RETURN, AUTO, BREAK, CASE, CONTINUE, DEFAULT, DO, ELSE, ENUM, EXTERN, FOR, GOTO, LONG, REGISTER, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, VOID, VOLATILE;
+
+/* Operadores y delimitadores */
+terminal IGUALDAD, NO_IGUAL, ADITIVO, SUSTRACTIVO, MULTIPLICACION, DIVISION, ASIGNACION;
+terminal PARENTESIS_IZQ, PARENTESIS_DER, LLAVE_IZQ, LLAVE_DER, PUNTO_Y_COMA, COMA;
+terminal INCREMENTO, DECREMENTO, MAYOR_IGUAL, MENOR_IGUAL, MAYOR, MENOR;
+terminal AND_BINARIO, OR_BINARIO, XOR_BINARIO, MODULO, DESPLAZAMIENTO_IZQ, DESPLAZAMIENTO_DER;
+terminal ASIGNACION_ADITIVA, ASIGNACION_SUSTRACTIVA, ASIGNACION_MULTIPLICATIVA, ASIGNACION_DIVISIVA, ASIGNACION_MODULO;
+terminal AND_LOGICO, OR_LOGICO, NOT_LOGICO, COMPLEMENTO_BINARIO;
+
+/* Otros */
+terminal ID, NUM, NUM_HEX, NUM_OCT, STRING, CHAR_LITERAL, NEWLINE, ERROR, NUM_CIENTIFICO;
+
+/* No-terminales */
+non terminal program, stmt_list, stmt, decl, type, expr, switch_stmt, case_list, case_block;
 
 /* Precedencias */
-precedence left PLUS, MINUS;
-precedence left MULT, DIV;
+precedence left ELSE;  // Resolver ambigüedad "dangling else"
+precedence left ADITIVO, SUSTRACTIVO;
+precedence left MULTIPLICACION, DIVISION;
+precedence left IGUALDAD, NO_IGUAL, MAYOR, MENOR, MAYOR_IGUAL, MENOR_IGUAL;
 
-/* Reglas de Producción */
-expr_list ::= expr_list expr
-            | expr;
+/* Símbolo inicial */
+start with program;
 
-expr ::= expr PLUS expr
-       | expr MINUS expr
-       | expr MULT expr
-       | expr DIV expr
-       | NUMBER
-       | error
-         {: System.err.println("Error de sintaxis, token inesperado."); :};
+/* Reglas de producción */
+program ::= stmt_list;
+
+stmt_list ::= stmt_list stmt
+            | stmt;
+
+stmt ::= decl PUNTO_Y_COMA
+       | expr PUNTO_Y_COMA
+       | IF PARENTESIS_IZQ expr PARENTESIS_DER stmt %prec ELSE
+       | IF PARENTESIS_IZQ expr PARENTESIS_DER stmt ELSE stmt
+       | WHILE PARENTESIS_IZQ expr PARENTESIS_DER stmt
+       | RETURN expr PUNTO_Y_COMA
+       | BREAK PUNTO_Y_COMA;
+
+decl ::= type ID
+       | type ID ASIGNACION expr;
+
+type ::= INT | FLOAT | CHAR | DOUBLE | VOID | UNSIGNED | SIGNED | SHORT | LONG;
+
+expr ::= expr ADITIVO expr
+       | expr SUSTRACTIVO expr
+       | expr MULTIPLICACION expr
+       | expr DIVISION expr
+       | expr IGUALDAD expr
+       | expr NO_IGUAL expr
+       | expr MAYOR expr
+       | expr MENOR expr
+       | expr MAYOR_IGUAL expr
+       | expr MENOR_IGUAL expr
+       | INCREMENTO expr
+       | DECREMENTO expr
+       | ID ASIGNACION expr
+       | PARENTESIS_IZQ expr PARENTESIS_DER
+       | NUM
+       | ID;
