@@ -1,82 +1,50 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.compi;
 
-import picocli.CommandLine;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.StringReader;
-import java.nio.file.Files;
-import java.util.Scanner;
-import java.util.concurrent.Callable;
 import java_cup.runtime.Symbol;
 
-@CommandLine.Command(name = "compi", mixinStandardHelpOptions = true, version = "0.0.1",
-        description = "Simple lexer and parser for C-like language.")
-public class App implements Callable<Integer> {
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import jflex.generator.LexGenerator;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
 
-    @CommandLine.Option(names = {"-f", "--file"}, description = "File to read", required = false)
-    private File file;
+public class App {
+    public static void main(String[] args) {
+        try {
+            String ruta1 = "C:\\Users\\Jhonn\\Documents\\GitHub\\AnalizadorLexico-Compi\\src\\main\\java\\com\\compi\\simple.flex";
+            String ruta2 = "C:\\Users\\Jhonn\\Documents\\GitHub\\AnalizadorLexico-Compi\\src\\main\\java\\com\\compi\\LexerCup.flex";
+            String[] rutaS = {"-parser", "Sintax", "C:\\Users\\Jhonn\\Documents\\GitHub\\AnalizadorLexico-Compi\\src\\main\\java\\com\\compi\\Sintax.cup"};
 
-    @Override
-    public Integer call() throws Exception {
-        if (file != null) {
-            // Lee el archivo de entrada
-            BufferedReader bfr = Files.newBufferedReader(file.toPath());
-            DemoLexer lexer = new DemoLexer(bfr);
-            Symbol token = lexer.yylex();
+            generar(ruta1, ruta2, rutaS);
 
-            while (token.sym != sym.EOF) {
-                System.out.println("Token: " + token.sym + " Lexema: " + token.value);
-                token = lexer.yylex();
+            // Procesar un archivo de entrada y mostrar resultados
+            File archivoEntrada = new File("C:\\Users\\Jhonn\\Documents\\GitHub\\AnalizadorLexico-Compi\\demo.txt");
+            LexerCup lexer = new LexerCup(new FileReader(archivoEntrada));
+            Symbol token;
+            while ((token = lexer.next_token()).sym != sym.EOF) {
+                System.out.println("Token: " + token);
             }
-
-            // Iniciar el parser con el lexer
-            Parser parser = new Parser(lexer);
-
-            try {
-                // Ejecutar el parser
-                parser.parse();
-                System.out.println("Análisis léxico y sintáctico completado.");
-
-                // Imprimir errores sintácticos (si los hay)
-                if (!parser.getSyntaxErrors().isEmpty()) {
-                    System.out.println("Errores sintácticos encontrados:");
-                    for (String error : parser.getSyntaxErrors()) {
-                        System.out.println(error);
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Error durante el análisis sintáctico: " + e.getMessage());
-            }
-
-        } else {
-            Scanner scanner = new Scanner(System.in);
-            String input = "";
-            while (!input.equals("exit")) {
-                System.out.print("Por favor ingrese la cadena > ");
-                input = scanner.nextLine();
-                if (input.equals("exit")) {
-                    break;
-                }
-
-                DemoLexer demoLexer = new DemoLexer(new StringReader(input));
-
-                // Iniciar el parser con el lexer
-                Parser parser = new Parser(demoLexer);
-
-                try {
-                    // Ejecutar el parser
-                    parser.parse();
-                    System.out.println("Análisis léxico y sintáctico completado.");
-                } catch (Exception e) {
-                    System.err.println("Error durante el análisis sintáctico: " + e.getMessage());
-                }
-            }
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
         }
-        return 0;
     }
 
-    public static void main(String[] args) {
-        int exitCode = new CommandLine(new App()).execute(args);
-        System.exit(exitCode);
+    public static void generar(String ruta1, String ruta2, String[] rutaS) throws IOException, Exception {
+        File archivo = new File(ruta1);
+        new LexGenerator(archivo).generate();  // Utilizando LexGenerator
+        archivo = new File(ruta2);
+        new LexGenerator(archivo).generate();
+        java_cup.Main.main(rutaS);
     }
 }
+

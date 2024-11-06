@@ -1,21 +1,15 @@
+int funcion1( int x   {  // falta parentesis
 
-int x = 10;
-float y;
-char z = 'A';
+	while (x && y){
+		x++;
+ 	}
 
-void testFunction() {
-    int a = 5;
-    y = x * 2.5;        // Multiplicación de int y float
-    a = a + 1;          // Incremento de variable
-    if (a > 10) {       // Condicional simple
-        a = 0;
-    }
-}
+	switch(x) {
 
-int main() {
-    x = 20;             // Asignación simple
-    z = 'B';            // Asignación a variable char
-    testFunction();     // Llamada a función sin valor de retorno
-    return 0;           // Retorno de valor en main
-}
-
+	case 5:    //se espera error por no tener ;
+        case 8: {break;}
+	case 5: {break;}
+	case x: {break;}  //error debe ser constante
+	default 5: {break;} //error por el 5, default no lleva expresion_constante
+	default: x++;  //se espera error por doble default habiendo quitado el error anterior
+ 	}

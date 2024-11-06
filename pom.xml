@@ -35,6 +35,19 @@
             <version>4.7.6</version>
         </dependency>
         <dependency>
+            <groupId>de.jflex</groupId>
+            <artifactId>jflex</artifactId>
+            <version>1.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.princeton.cs</groupId>
+            <artifactId>java-cup</artifactId>
+            <version>11b</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/Jhonn/Downloads/java-cup-bin-11b-20160615 (1)/java-cup-11b.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
@@ -70,6 +83,12 @@
             <id>uwm-repository</id>
             <url>https://repo.maven.apache.org/maven2</url>
         </repository>
+
+            <repository>
+                <id>jitpack.io</id>
+                <url>https://jitpack.io</url>
+            </repository>
+
     </repositories>
 
     <build>
