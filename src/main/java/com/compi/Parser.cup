@@ -1,71 +1,6 @@
 // Declaración de paquete y imports para los archivos generados
 package com.compi;
 
-<<<<<<< Updated upstream
-import java_cup.runtime.Symbol;
-
-/* Parser error handling code */
-parser code {:
-    public void report_error(String message, Object info) {
-        if (info instanceof Symbol) {
-            Symbol symbol = (Symbol) info;
-            System.err.println("Error de sintaxis en línea " + symbol.left + ", columna " + symbol.right + ": " + message);
-        } else {
-            System.err.println("Error de sintaxis: " + message);
-        }
-    }
-
-    public void syntax_error(Symbol cur_token) {
-        System.err.println("Error de sintaxis en línea " + cur_token.left + ", columna " + cur_token.right + ": token inesperado '" + cur_token.value + "'");
-    }
-:};
-
-/* Palabras reservadas */
-terminal INT, FLOAT, CHAR, UNSIGNED, CONST, DOUBLE, IF, WHILE, RETURN, AUTO, BREAK, CASE, CONTINUE, DEFAULT, DO, ELSE, ENUM, EXTERN, FOR, GOTO, LONG, REGISTER, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, SWITCH, TYPEDEF, UNION, VOID, VOLATILE;
-
-/* Operadores y delimitadores */
-terminal IGUALDAD, NO_IGUAL, ADITIVO, SUSTRACTIVO, MULTIPLICACION, DIVISION, ASIGNACION;
-terminal PARENTESIS_IZQ, PARENTESIS_DER, LLAVE_IZQ, LLAVE_DER, PUNTO_Y_COMA, COMA;
-terminal INCREMENTO, DECREMENTO, MAYOR_IGUAL, MENOR_IGUAL, MAYOR, MENOR;
-terminal AND_BINARIO, OR_BINARIO, XOR_BINARIO, MODULO, DESPLAZAMIENTO_IZQ, DESPLAZAMIENTO_DER;
-terminal ASIGNACION_ADITIVA, ASIGNACION_SUSTRACTIVA, ASIGNACION_MULTIPLICATIVA, ASIGNACION_DIVISIVA, ASIGNACION_MODULO;
-terminal AND_LOGICO, OR_LOGICO, NOT_LOGICO, COMPLEMENTO_BINARIO;
-
-/* Otros */
-terminal ID, NUM, NUM_HEX, NUM_OCT, STRING, CHAR_LITERAL, NEWLINE, ERROR, NUM_CIENTIFICO;
-
-/* No-terminales */
-non terminal program, stmt_list, stmt, decl, type, expr, switch_stmt, case_list, case_block;
-
-/* Precedencias */
-precedence left ELSE;  // Resolver ambigüedad "dangling else"
-precedence left ADITIVO, SUSTRACTIVO;
-precedence left MULTIPLICACION, DIVISION;
-precedence left IGUALDAD, NO_IGUAL, MAYOR, MENOR, MAYOR_IGUAL, MENOR_IGUAL;
-
-/* Símbolo inicial */
-start with program;
-
-/* Reglas de producción */
-program ::= stmt_list;
-
-stmt_list ::= stmt_list stmt
-            | stmt;
-
-stmt ::= decl PUNTO_Y_COMA
-       | expr PUNTO_Y_COMA
-       | IF PARENTESIS_IZQ expr PARENTESIS_DER stmt %prec ELSE
-       | IF PARENTESIS_IZQ expr PARENTESIS_DER stmt ELSE stmt
-       | WHILE PARENTESIS_IZQ expr PARENTESIS_DER stmt
-       | RETURN expr PUNTO_Y_COMA
-       | BREAK PUNTO_Y_COMA;
-
-decl ::= type ID
-       | type ID ASIGNACION expr;
-
-type ::= INT | FLOAT | CHAR | DOUBLE | VOID | UNSIGNED | SIGNED | SHORT | LONG;
-
-=======
 import java.util.HashMap;
 import java.util.ArrayList;
 import java_cup.runtime.Symbol;
@@ -104,20 +39,22 @@ terminal int ID, NUM, CHAR_LITERAL, STRING;
 terminal IGUALDAD, NO_IGUAL, ADITIVO, SUSTRACTIVO, MULTIPLICACION, DIVISION, ASIGNACION;
 terminal PARENTESIS_IZQ, PARENTESIS_DER, LLAVE_IZQ, LLAVE_DER, PUNTO_Y_COMA, COMA;
 terminal INT, FLOAT, CHAR, VOID, IF, ELSE, WHILE, FOR, RETURN, CONST, END, DO, SWITCH, CASE, DEFAULT, BREAK, CONTINUE;
-terminal LONG, SHORT, DOUBLE, SIGNED, UNSIGNED, AUTO, REGISTER, EXTERN, STATIC, VOLATILE, STRUCT, UNION, TYPEDEF, SIZEOF;
+terminal LONG, SHORT, DOUBLE, SIGNED, UNSIGNED, AUTO, REGISTER, EXTERN, STATIC, VOLATILE, STRUCT, UNION, TYPEDEF, SIZEOF, NUM_HEX,ENUM,GOTO,NUM_CIENTIFICO;
 terminal INCREMENTO, DECREMENTO, COLON, MAYOR_IGUAL, MENOR_IGUAL, MAYOR, MENOR;
 terminal AND_BINARIO, OR_BINARIO, XOR_BINARIO, MODULO, DESPLAZAMIENTO_IZQ, DESPLAZAMIENTO_DER;
 terminal ASIGNACION_ADITIVA, ASIGNACION_SUSTRACTIVA, ASIGNACION_MULTIPLICATIVA, ASIGNACION_DIVISIVA, ASIGNACION_MODULO;
-terminal AND_LOGICO, OR_LOGICO, NOT_LOGICO, COMPLEMENTO_BINARIO, NEWLINE, ERROR, NUM_HEX,ENUM,GOTO,NUM_CIENTIFICO;
+terminal AND_LOGICO, OR_LOGICO, NOT_LOGICO, COMPLEMENTO_BINARIO, NEWLINE, ERROR;
 
 
 // Definición de no terminales
 non terminal program, declaration_list, declaration, func_decl, var_decl, statement, expr, block, statement_list;
+
 // Definición de precedencia y asociatividad
 precedence left ADITIVO, SUSTRACTIVO;
 precedence left MULTIPLICACION, DIVISION;
 precedence right IGUALDAD, NO_IGUAL;
 precedence right PARENTESIS_IZQ, PARENTESIS_DER;
+
 
 
 
@@ -162,28 +99,12 @@ statement ::= var_decl
               {: syntaxErrors.add("Error en sentencia."); :};
 
 // Expresión (con precedencia definida)
->>>>>>> Stashed changes
 expr ::= expr ADITIVO expr
        | expr SUSTRACTIVO expr
        | expr MULTIPLICACION expr
        | expr DIVISION expr
-<<<<<<< Updated upstream
-       | expr IGUALDAD expr
-       | expr NO_IGUAL expr
-       | expr MAYOR expr
-       | expr MENOR expr
-       | expr MAYOR_IGUAL expr
-       | expr MENOR_IGUAL expr
-       | INCREMENTO expr
-       | DECREMENTO expr
-       | ID ASIGNACION expr
-       | PARENTESIS_IZQ expr PARENTESIS_DER
-       | NUM
-       | ID;
-=======
        | ID
        | NUM
        | CHAR_LITERAL
        | STRING
        | PARENTESIS_IZQ expr PARENTESIS_DER;
->>>>>>> Stashed changes

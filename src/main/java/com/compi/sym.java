@@ -8,161 +8,84 @@ package com.compi;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-<<<<<<< Updated upstream
-  public static final int SHORT = 24;
-  public static final int SIGNED = 25;
-  public static final int AND_LOGICO = 64;
-  public static final int DIVISION = 39;
-  public static final int MENOR_IGUAL = 50;
-  public static final int ASIGNACION_DIVISIVA = 62;
-  public static final int CONST = 6;
-  public static final int XOR_BINARIO = 55;
-  public static final int NEWLINE = 74;
-  public static final int LLAVE_IZQ = 43;
-  public static final int PARENTESIS_DER = 42;
-  public static final int MAYOR = 51;
-  public static final int REGISTER = 23;
-  public static final int ENUM = 18;
-  public static final int SIZEOF = 26;
-  public static final int ASIGNACION_SUSTRACTIVA = 60;
-  public static final int DOUBLE = 7;
-  public static final int STRUCT = 28;
-  public static final int OR_BINARIO = 54;
-  public static final int SUSTRACTIVO = 37;
-  public static final int ERROR = 75;
-  public static final int FLOAT = 3;
-  public static final int GOTO = 21;
-  public static final int NUM = 69;
-  public static final int NUM_HEX = 70;
-  public static final int IGUALDAD = 34;
-  public static final int INCREMENTO = 47;
-  public static final int COMA = 46;
-  public static final int DESPLAZAMIENTO_DER = 58;
-  public static final int MODULO = 56;
-  public static final int LONG = 22;
-  public static final int WHILE = 9;
-  public static final int UNION = 31;
-  public static final int CHAR = 4;
-  public static final int NUM_OCT = 71;
-  public static final int ASIGNACION_ADITIVA = 59;
-  public static final int SWITCH = 29;
-  public static final int DO = 16;
-  public static final int FOR = 20;
-  public static final int PARENTESIS_IZQ = 41;
-  public static final int VOID = 32;
-  public static final int DECREMENTO = 48;
-  public static final int EXTERN = 19;
-  public static final int RETURN = 10;
-  public static final int ASIGNACION_MODULO = 63;
-  public static final int OR_LOGICO = 65;
-  public static final int ELSE = 17;
-  public static final int NO_IGUAL = 35;
-  public static final int MENOR = 52;
-  public static final int BREAK = 12;
-  public static final int INT = 2;
-=======
   public static final int SHORT = 37;
   public static final int SIGNED = 39;
-  public static final int AND_LOGICO = 68;
+  public static final int AND_LOGICO = 72;
   public static final int DIVISION = 11;
-  public static final int MENOR_IGUAL = 54;
-  public static final int ASIGNACION_DIVISIVA = 66;
+  public static final int MENOR_IGUAL = 58;
+  public static final int ASIGNACION_DIVISIVA = 70;
   public static final int CONST = 28;
-  public static final int XOR_BINARIO = 59;
-  public static final int NEWLINE = 72;
+  public static final int XOR_BINARIO = 63;
+  public static final int NEWLINE = 76;
   public static final int LLAVE_IZQ = 15;
   public static final int PARENTESIS_DER = 14;
-  public static final int MAYOR = 55;
+  public static final int MAYOR = 59;
   public static final int REGISTER = 42;
-  public static final int ENUM = 75;
+  public static final int ENUM = 51;
   public static final int SIZEOF = 49;
-  public static final int ASIGNACION_SUSTRACTIVA = 64;
+  public static final int ASIGNACION_SUSTRACTIVA = 68;
   public static final int DOUBLE = 38;
   public static final int STRUCT = 46;
-  public static final int OR_BINARIO = 58;
+  public static final int OR_BINARIO = 62;
   public static final int SUSTRACTIVO = 9;
-  public static final int ERROR = 73;
+  public static final int ERROR = 77;
   public static final int FLOAT = 20;
-  public static final int GOTO = 76;
+  public static final int GOTO = 52;
   public static final int NUM = 3;
-  public static final int NUM_HEX = 74;
+  public static final int NUM_HEX = 50;
   public static final int IGUALDAD = 6;
-  public static final int INCREMENTO = 50;
+  public static final int INCREMENTO = 54;
   public static final int COMA = 18;
-  public static final int DESPLAZAMIENTO_DER = 62;
-  public static final int MODULO = 60;
+  public static final int DESPLAZAMIENTO_DER = 66;
+  public static final int MODULO = 64;
   public static final int LONG = 36;
   public static final int WHILE = 25;
   public static final int UNION = 47;
   public static final int CHAR = 21;
-  public static final int ASIGNACION_ADITIVA = 63;
+  public static final int ASIGNACION_ADITIVA = 67;
   public static final int SWITCH = 31;
   public static final int DO = 30;
   public static final int FOR = 26;
   public static final int PARENTESIS_IZQ = 13;
   public static final int VOID = 22;
-  public static final int DECREMENTO = 51;
+  public static final int DECREMENTO = 55;
   public static final int EXTERN = 43;
   public static final int RETURN = 27;
-  public static final int ASIGNACION_MODULO = 67;
-  public static final int OR_LOGICO = 69;
+  public static final int ASIGNACION_MODULO = 71;
+  public static final int OR_LOGICO = 73;
   public static final int ELSE = 24;
   public static final int NO_IGUAL = 7;
-  public static final int MENOR = 56;
+  public static final int MENOR = 60;
   public static final int BREAK = 34;
   public static final int INT = 19;
->>>>>>> Stashed changes
   public static final int EOF = 0;
   public static final int PUNTO_Y_COMA = 17;
   public static final int DEFAULT = 33;
   public static final int LLAVE_DER = 16;
-  public static final int COMPLEMENTO_BINARIO = 71;
+  public static final int COMPLEMENTO_BINARIO = 75;
   public static final int error = 1;
-<<<<<<< Updated upstream
-  public static final int CONTINUE = 14;
-  public static final int IF = 8;
-  public static final int UNSIGNED = 5;
-  public static final int ID = 68;
-  public static final int NOT_LOGICO = 66;
-  public static final int MULTIPLICACION = 38;
-  public static final int ADITIVO = 36;
-  public static final int NUM_CIENTIFICO = 76;
-  public static final int CHAR_LITERAL = 73;
-  public static final int VOLATILE = 33;
-  public static final int ASIGNACION = 40;
-  public static final int CASE = 13;
-  public static final int DESPLAZAMIENTO_IZQ = 57;
-  public static final int ASIGNACION_MULTIPLICATIVA = 61;
-  public static final int STRING = 72;
-  public static final int AND_BINARIO = 53;
-  public static final int STATIC = 27;
-  public static final int MAYOR_IGUAL = 49;
-  public static final int TYPEDEF = 30;
-  public static final int AUTO = 11;
-=======
   public static final int CONTINUE = 35;
   public static final int IF = 23;
   public static final int UNSIGNED = 40;
   public static final int ID = 2;
   public static final int END = 29;
-  public static final int COLON = 52;
-  public static final int NOT_LOGICO = 70;
+  public static final int COLON = 56;
+  public static final int NOT_LOGICO = 74;
   public static final int MULTIPLICACION = 10;
   public static final int ADITIVO = 8;
-  public static final int NUM_CIENTIFICO = 77;
+  public static final int NUM_CIENTIFICO = 53;
   public static final int VOLATILE = 45;
   public static final int CHAR_LITERAL = 4;
   public static final int ASIGNACION = 12;
   public static final int CASE = 32;
-  public static final int DESPLAZAMIENTO_IZQ = 61;
-  public static final int ASIGNACION_MULTIPLICATIVA = 65;
+  public static final int DESPLAZAMIENTO_IZQ = 65;
+  public static final int ASIGNACION_MULTIPLICATIVA = 69;
   public static final int STRING = 5;
-  public static final int AND_BINARIO = 57;
+  public static final int AND_BINARIO = 61;
   public static final int STATIC = 44;
-  public static final int MAYOR_IGUAL = 53;
+  public static final int MAYOR_IGUAL = 57;
   public static final int TYPEDEF = 48;
   public static final int AUTO = 41;
->>>>>>> Stashed changes
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -214,6 +137,10 @@ public class sym {
   "UNION",
   "TYPEDEF",
   "SIZEOF",
+  "NUM_HEX",
+  "ENUM",
+  "GOTO",
+  "NUM_CIENTIFICO",
   "INCREMENTO",
   "DECREMENTO",
   "COLON",
@@ -237,14 +164,7 @@ public class sym {
   "NOT_LOGICO",
   "COMPLEMENTO_BINARIO",
   "NEWLINE",
-  "ERROR",
-<<<<<<< Updated upstream
-=======
-  "NUM_HEX",
-  "ENUM",
-  "GOTO",
->>>>>>> Stashed changes
-  "NUM_CIENTIFICO"
+  "ERROR"
   };
 }
 
