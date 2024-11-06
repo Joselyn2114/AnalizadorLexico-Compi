@@ -1,5 +1,10 @@
+<<<<<<< Updated upstream
 // ** Archivo de especificación léxica **
 package com.compi; // Declara el paquete donde quiero generar mi clase
+=======
+// * Archivo de especificación léxica *
+package com.compi;
+>>>>>>> Stashed changes
 
 import java_cup.runtime.Symbol;
 
@@ -37,7 +42,11 @@ newline = [\n]
 "//".* { /* DO NOTHING */ }
 
 // Comentarios de bloque
+<<<<<<< Updated upstream
 "/\\*([^*]|\\*+[^/*])*\\*+/" { /* DO NOTHING */ }
+=======
+"/\\([^]|\\+[^/])\\+/" { /* DO NOTHING */ }
+>>>>>>> Stashed changes
 
 // Comentario sin terminar
 "/\\*" {
@@ -80,6 +89,7 @@ newline = [\n]
 "volatile"  { return new Symbol(sym.VOLATILE, lineNumber, columnNumber, yytext()); }
 
 // Operadores y delimitadores
+<<<<<<< Updated upstream
 "=="        { return new Symbol(sym.IGUALDAD, lineNumber, columnNumber, yytext()); }
 "!="        { return new Symbol(sym.NO_IGUAL, lineNumber, columnNumber, yytext()); }
 "+"         { return new Symbol(sym.ADITIVO, lineNumber, columnNumber, yytext()); }
@@ -158,6 +168,72 @@ newline = [\n]
     columnNumber += yylength();
     return sym;
 }
+=======
+"=="        { return new Symbol(sym.IGUALDAD, yytext()); }
+"!="        { return new Symbol(sym.NO_IGUAL, yytext()); }
+"+"         { return new Symbol(sym.ADITIVO, yytext()); }
+"-"         { return new Symbol(sym.SUSTRACTIVO, yytext()); }
+"*"         { return new Symbol(sym.MULTIPLICACION, yytext()); }
+"/"         { return new Symbol(sym.DIVISION, yytext()); }
+"="         { return new Symbol(sym.ASIGNACION, yytext()); }
+"("         { return new Symbol(sym.PARENTESIS_IZQ, yytext()); }
+")"         { return new Symbol(sym.PARENTESIS_DER, yytext()); }
+"{"         { return new Symbol(sym.LLAVE_IZQ, yytext()); }
+"}"         { return new Symbol(sym.LLAVE_DER, yytext()); }
+";"         { return new Symbol(sym.PUNTO_Y_COMA, yytext()); }
+","         { return new Symbol(sym.COMA, yytext()); }
+"++"        { return new Symbol(sym.INCREMENTO, yytext()); }
+"--"        { return new Symbol(sym.DECREMENTO, yytext()); }
+":"         { return new Symbol(sym.COLON, yytext()); }
+">="        { return new Symbol(sym.MAYOR_IGUAL, yytext()); }
+"<="        { return new Symbol(sym.MENOR_IGUAL, yytext()); }
+">"         { return new Symbol(sym.MAYOR, yytext()); }
+"<"         { return new Symbol(sym.MENOR, yytext()); }
+"&"         { return new Symbol(sym.AND_BINARIO, yytext()); }
+"|"         { return new Symbol(sym.OR_BINARIO, yytext()); }
+"^"         { return new Symbol(sym.XOR_BINARIO, yytext()); }
+"%"         { return new Symbol(sym.MODULO, yytext()); }
+"<<"        { return new Symbol(sym.DESPLAZAMIENTO_IZQ, yytext()); }
+">>"        { return new Symbol(sym.DESPLAZAMIENTO_DER, yytext()); }
+"+="        { return new Symbol(sym.ASIGNACION_ADITIVA, yytext()); }
+"-="        { return new Symbol(sym.ASIGNACION_SUSTRACTIVA, yytext()); }
+"*="        { return new Symbol(sym.ASIGNACION_MULTIPLICATIVA, yytext()); }
+"/="        { return new Symbol(sym.ASIGNACION_DIVISIVA, yytext()); }
+"%="        { return new Symbol(sym.ASIGNACION_MODULO, yytext()); }
+"&&"        { return new Symbol(sym.AND_LOGICO, yytext()); }
+"||"        { return new Symbol(sym.OR_LOGICO, yytext()); }
+"!"         { return new Symbol(sym.NOT_LOGICO, yytext()); }
+"~"         { return new Symbol(sym.COMPLEMENTO_BINARIO, yytext()); }
+
+// Literales de cadena
+\"([^\"\\]|\\.)*\" { return new Symbol(sym.STRING, yytext()); }
+\"([^\"\\]|\\.)*   { lexicalErrors.add("Error: Cadena sin cerrar en línea " + lineNumber); return new Symbol(sym.ERROR, yytext()); }
+
+// Literales de caracteres
+\'([^'\\]|\\.)\' { return new Symbol(sym.CHAR_LITERAL, yytext()); }
+\'([^'\\]|\\.)?\' { lexicalErrors.add("Error: Carácter mal formado en línea " + lineNumber); return new Symbol(sym.ERROR, yytext()); }
+
+// Identificadores
+{letter}({letter}|{digit})* { return new Symbol(sym.ID, yytext()); }
+{letter}({whitespace}+{letter}|{whitespace}+{digit})* {
+    lexicalErrors.add("Error: Identificador mal formado con espacios en línea " + lineNumber);
+    return new Symbol(sym.ERROR, yytext());
+}
+
+// Números
+{digit}+ { return new Symbol(sym.NUM, yytext()); } // Números enteros
+{digit}+"."{digit}+([eE][-+]?{digit}+) { return new Symbol(sym.NUM_CIENTIFICO, yytext()); }
+{digit}+"."{digit}+ { return new Symbol(sym.NUM, yytext()); }
+{digit}+"."{digit}*[eE] { lexicalErrors.add("Error: Número científico mal formado en línea " + lineNumber); return new Symbol(sym.ERROR, yytext()); }
+
+// Hexadecimales
+0[xX][0-9a-fA-F]+ { return new Symbol(sym.NUM_HEX, yytext()); }
+0[xX][^0-9a-fA-F]+ { lexicalErrors.add("Error: Número hexadecimal mal formado en línea " + lineNumber); return new Symbol(sym.ERROR, yytext()); }
+
+// Octales
+"0"[0-7]+ { return new Symbol(sym.NUM_OCT, yytext()); }
+"0"[8-9]+ { lexicalErrors.add("Error: Número octal mal formado en línea " + lineNumber); return new Symbol(sym.ERROR, yytext()); }
+>>>>>>> Stashed changes
 
 // Espacios en blanco
 {whitespace}+ { /* Ignorar espacios en blanco */ }

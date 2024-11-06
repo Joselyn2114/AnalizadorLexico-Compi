@@ -36,6 +36,14 @@ public class App implements Callable<Integer> {
                 // Ejecutar el parser
                 parser.parse();
                 System.out.println("Análisis léxico y sintáctico completado.");
+
+                // Imprimir errores sintácticos (si los hay)
+                if (!parser.getSyntaxErrors().isEmpty()) {
+                    System.out.println("Errores sintácticos encontrados:");
+                    for (String error : parser.getSyntaxErrors()) {
+                        System.out.println(error);
+                    }
+                }
             } catch (Exception e) {
                 System.err.println("Error durante el análisis sintáctico: " + e.getMessage());
             }

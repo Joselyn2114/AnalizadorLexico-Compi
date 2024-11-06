@@ -1,5 +1,7 @@
+// Declaración de paquete y imports para los archivos generados
 package com.compi;
 
+<<<<<<< Updated upstream
 import java_cup.runtime.Symbol;
 
 /* Parser error handling code */
@@ -63,10 +65,109 @@ decl ::= type ID
 
 type ::= INT | FLOAT | CHAR | DOUBLE | VOID | UNSIGNED | SIGNED | SHORT | LONG;
 
+=======
+import java.util.HashMap;
+import java.util.ArrayList;
+import java_cup.runtime.Symbol;
+
+// Sección de código del parser
+parser code {:
+    public ArrayList<String> syntaxErrors = new ArrayList<>();
+    public ArrayList<String> semanticErrors = new ArrayList<>();
+
+    private HashMap<String, String> symbolTable = new HashMap<>();
+
+    private void declareVariable(String id, String type) {
+        if (symbolTable.containsKey(id)) {
+            semanticErrors.add("Error: Variable '" + id + "' ya ha sido declarada.");
+        } else {
+            symbolTable.put(id, type);
+        }
+    }
+
+    private void checkVariable(String id) {
+        if (!symbolTable.containsKey(id)) {
+            semanticErrors.add("Error: Variable '" + id + "' no ha sido declarada.");
+        }
+    }
+
+    public ArrayList<String> getSyntaxErrors() {
+        return syntaxErrors;
+    }
+
+    public ArrayList<String> getSemanticErrors() {
+        return semanticErrors;
+    }
+:};
+// Definición de terminales
+terminal int ID, NUM, CHAR_LITERAL, STRING;
+terminal IGUALDAD, NO_IGUAL, ADITIVO, SUSTRACTIVO, MULTIPLICACION, DIVISION, ASIGNACION;
+terminal PARENTESIS_IZQ, PARENTESIS_DER, LLAVE_IZQ, LLAVE_DER, PUNTO_Y_COMA, COMA;
+terminal INT, FLOAT, CHAR, VOID, IF, ELSE, WHILE, FOR, RETURN, CONST, END, DO, SWITCH, CASE, DEFAULT, BREAK, CONTINUE;
+terminal LONG, SHORT, DOUBLE, SIGNED, UNSIGNED, AUTO, REGISTER, EXTERN, STATIC, VOLATILE, STRUCT, UNION, TYPEDEF, SIZEOF;
+terminal INCREMENTO, DECREMENTO, COLON, MAYOR_IGUAL, MENOR_IGUAL, MAYOR, MENOR;
+terminal AND_BINARIO, OR_BINARIO, XOR_BINARIO, MODULO, DESPLAZAMIENTO_IZQ, DESPLAZAMIENTO_DER;
+terminal ASIGNACION_ADITIVA, ASIGNACION_SUSTRACTIVA, ASIGNACION_MULTIPLICATIVA, ASIGNACION_DIVISIVA, ASIGNACION_MODULO;
+terminal AND_LOGICO, OR_LOGICO, NOT_LOGICO, COMPLEMENTO_BINARIO, NEWLINE, ERROR, NUM_HEX,ENUM,GOTO,NUM_CIENTIFICO;
+
+
+// Definición de no terminales
+non terminal program, declaration_list, declaration, func_decl, var_decl, statement, expr, block, statement_list;
+// Definición de precedencia y asociatividad
+precedence left ADITIVO, SUSTRACTIVO;
+precedence left MULTIPLICACION, DIVISION;
+precedence right IGUALDAD, NO_IGUAL;
+precedence right PARENTESIS_IZQ, PARENTESIS_DER;
+
+
+
+// Producción de inicio
+start with program;
+
+// Estructura principal del programa
+program ::= declaration_list END;
+
+// Lista de declaraciones (pueden ser variables o funciones)
+declaration_list ::= declaration_list declaration
+                  | /* epsilon */;
+
+declaration ::= var_decl
+              | func_decl
+              | error PUNTO_Y_COMA
+                {: syntaxErrors.add("Error en declaración."); :};
+
+// Declaración de variable
+var_decl ::= INT ID PUNTO_Y_COMA
+            {: declareVariable("id", "int"); :}
+           | FLOAT ID PUNTO_Y_COMA
+            {: declareVariable("id", "float"); :}
+           | CHAR ID PUNTO_Y_COMA
+            {: declareVariable("id", "char"); :};
+
+// Declaración de función
+func_decl ::= (INT | FLOAT | CHAR | VOID) ID PARENTESIS_IZQ PARENTESIS_DER block;
+
+// Bloque de código de función
+block ::= LLAVE_IZQ statement_list LLAVE_DER;
+
+statement_list ::= statement_list statement
+                 | /* epsilon */;
+
+// Definición de las sentencias dentro de un bloque
+statement ::= var_decl
+            | RETURN expr PUNTO_Y_COMA
+            | expr PUNTO_Y_COMA
+            | block
+            | error PUNTO_Y_COMA
+              {: syntaxErrors.add("Error en sentencia."); :};
+
+// Expresión (con precedencia definida)
+>>>>>>> Stashed changes
 expr ::= expr ADITIVO expr
        | expr SUSTRACTIVO expr
        | expr MULTIPLICACION expr
        | expr DIVISION expr
+<<<<<<< Updated upstream
        | expr IGUALDAD expr
        | expr NO_IGUAL expr
        | expr MAYOR expr
@@ -79,3 +180,10 @@ expr ::= expr ADITIVO expr
        | PARENTESIS_IZQ expr PARENTESIS_DER
        | NUM
        | ID;
+=======
+       | ID
+       | NUM
+       | CHAR_LITERAL
+       | STRING
+       | PARENTESIS_IZQ expr PARENTESIS_DER;
+>>>>>>> Stashed changes

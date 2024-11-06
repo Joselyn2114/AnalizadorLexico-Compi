@@ -8,6 +8,7 @@ package com.compi;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+<<<<<<< Updated upstream
   public static final int SHORT = 24;
   public static final int SIGNED = 25;
   public static final int AND_LOGICO = 64;
@@ -59,12 +60,65 @@ public class sym {
   public static final int MENOR = 52;
   public static final int BREAK = 12;
   public static final int INT = 2;
+=======
+  public static final int SHORT = 37;
+  public static final int SIGNED = 39;
+  public static final int AND_LOGICO = 68;
+  public static final int DIVISION = 11;
+  public static final int MENOR_IGUAL = 54;
+  public static final int ASIGNACION_DIVISIVA = 66;
+  public static final int CONST = 28;
+  public static final int XOR_BINARIO = 59;
+  public static final int NEWLINE = 72;
+  public static final int LLAVE_IZQ = 15;
+  public static final int PARENTESIS_DER = 14;
+  public static final int MAYOR = 55;
+  public static final int REGISTER = 42;
+  public static final int ENUM = 75;
+  public static final int SIZEOF = 49;
+  public static final int ASIGNACION_SUSTRACTIVA = 64;
+  public static final int DOUBLE = 38;
+  public static final int STRUCT = 46;
+  public static final int OR_BINARIO = 58;
+  public static final int SUSTRACTIVO = 9;
+  public static final int ERROR = 73;
+  public static final int FLOAT = 20;
+  public static final int GOTO = 76;
+  public static final int NUM = 3;
+  public static final int NUM_HEX = 74;
+  public static final int IGUALDAD = 6;
+  public static final int INCREMENTO = 50;
+  public static final int COMA = 18;
+  public static final int DESPLAZAMIENTO_DER = 62;
+  public static final int MODULO = 60;
+  public static final int LONG = 36;
+  public static final int WHILE = 25;
+  public static final int UNION = 47;
+  public static final int CHAR = 21;
+  public static final int ASIGNACION_ADITIVA = 63;
+  public static final int SWITCH = 31;
+  public static final int DO = 30;
+  public static final int FOR = 26;
+  public static final int PARENTESIS_IZQ = 13;
+  public static final int VOID = 22;
+  public static final int DECREMENTO = 51;
+  public static final int EXTERN = 43;
+  public static final int RETURN = 27;
+  public static final int ASIGNACION_MODULO = 67;
+  public static final int OR_LOGICO = 69;
+  public static final int ELSE = 24;
+  public static final int NO_IGUAL = 7;
+  public static final int MENOR = 56;
+  public static final int BREAK = 34;
+  public static final int INT = 19;
+>>>>>>> Stashed changes
   public static final int EOF = 0;
-  public static final int PUNTO_Y_COMA = 45;
-  public static final int DEFAULT = 15;
-  public static final int LLAVE_DER = 44;
-  public static final int COMPLEMENTO_BINARIO = 67;
+  public static final int PUNTO_Y_COMA = 17;
+  public static final int DEFAULT = 33;
+  public static final int LLAVE_DER = 16;
+  public static final int COMPLEMENTO_BINARIO = 71;
   public static final int error = 1;
+<<<<<<< Updated upstream
   public static final int CONTINUE = 14;
   public static final int IF = 8;
   public static final int UNSIGNED = 5;
@@ -85,41 +139,37 @@ public class sym {
   public static final int MAYOR_IGUAL = 49;
   public static final int TYPEDEF = 30;
   public static final int AUTO = 11;
+=======
+  public static final int CONTINUE = 35;
+  public static final int IF = 23;
+  public static final int UNSIGNED = 40;
+  public static final int ID = 2;
+  public static final int END = 29;
+  public static final int COLON = 52;
+  public static final int NOT_LOGICO = 70;
+  public static final int MULTIPLICACION = 10;
+  public static final int ADITIVO = 8;
+  public static final int NUM_CIENTIFICO = 77;
+  public static final int VOLATILE = 45;
+  public static final int CHAR_LITERAL = 4;
+  public static final int ASIGNACION = 12;
+  public static final int CASE = 32;
+  public static final int DESPLAZAMIENTO_IZQ = 61;
+  public static final int ASIGNACION_MULTIPLICATIVA = 65;
+  public static final int STRING = 5;
+  public static final int AND_BINARIO = 57;
+  public static final int STATIC = 44;
+  public static final int MAYOR_IGUAL = 53;
+  public static final int TYPEDEF = 48;
+  public static final int AUTO = 41;
+>>>>>>> Stashed changes
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "INT",
-  "FLOAT",
-  "CHAR",
-  "UNSIGNED",
-  "CONST",
-  "DOUBLE",
-  "IF",
-  "WHILE",
-  "RETURN",
-  "AUTO",
-  "BREAK",
-  "CASE",
-  "CONTINUE",
-  "DEFAULT",
-  "DO",
-  "ELSE",
-  "ENUM",
-  "EXTERN",
-  "FOR",
-  "GOTO",
-  "LONG",
-  "REGISTER",
-  "SHORT",
-  "SIGNED",
-  "SIZEOF",
-  "STATIC",
-  "STRUCT",
-  "SWITCH",
-  "TYPEDEF",
-  "UNION",
-  "VOID",
-  "VOLATILE",
+  "ID",
+  "NUM",
+  "CHAR_LITERAL",
+  "STRING",
   "IGUALDAD",
   "NO_IGUAL",
   "ADITIVO",
@@ -133,8 +183,40 @@ public class sym {
   "LLAVE_DER",
   "PUNTO_Y_COMA",
   "COMA",
+  "INT",
+  "FLOAT",
+  "CHAR",
+  "VOID",
+  "IF",
+  "ELSE",
+  "WHILE",
+  "FOR",
+  "RETURN",
+  "CONST",
+  "END",
+  "DO",
+  "SWITCH",
+  "CASE",
+  "DEFAULT",
+  "BREAK",
+  "CONTINUE",
+  "LONG",
+  "SHORT",
+  "DOUBLE",
+  "SIGNED",
+  "UNSIGNED",
+  "AUTO",
+  "REGISTER",
+  "EXTERN",
+  "STATIC",
+  "VOLATILE",
+  "STRUCT",
+  "UNION",
+  "TYPEDEF",
+  "SIZEOF",
   "INCREMENTO",
   "DECREMENTO",
+  "COLON",
   "MAYOR_IGUAL",
   "MENOR_IGUAL",
   "MAYOR",
@@ -154,14 +236,14 @@ public class sym {
   "OR_LOGICO",
   "NOT_LOGICO",
   "COMPLEMENTO_BINARIO",
-  "ID",
-  "NUM",
-  "NUM_HEX",
-  "NUM_OCT",
-  "STRING",
-  "CHAR_LITERAL",
   "NEWLINE",
   "ERROR",
+<<<<<<< Updated upstream
+=======
+  "NUM_HEX",
+  "ENUM",
+  "GOTO",
+>>>>>>> Stashed changes
   "NUM_CIENTIFICO"
   };
 }

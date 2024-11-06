@@ -1,1 +1,23 @@
+<<<<<<< Updated upstream
 5 + 3 * 2
+=======
+int x = 10;
+float y;
+char z = 'A';
+
+void testFunction() {
+    int a = 5;
+    y = x * 2.5;        // Multiplicación de int y float
+    a = a + 1;          // Incremento de variable
+    if (a > 10) {       // Condicional simple
+        a = 0;
+    }
+}
+
+int main() {
+    x = 20;             // Asignación simple
+    z = 'B';            // Asignación a variable char
+    testFunction();     // Llamada a función sin valor de retorno
+    return 0;           // Retorno de valor en main
+}
+>>>>>>> Stashed changes
