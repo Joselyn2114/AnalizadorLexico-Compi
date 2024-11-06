@@ -1,12 +1,23 @@
-int main() {
-    int x = 5, y = 10;
-    if (x < y) {
-        write(x + y);
-    } else {
-        read(x);
-    }
-    // Error léxico
-    return 0;
+int x = 10
+float y;               // Falta punto y coma en la declaración anterior
+
+char z = 'A';
+
+void testFunction() {
+    int a = 5;
+    y = x * ;          // Falta el valor después del operador '*'
+    a = a + ;          // Falta el valor después del operador '+'
+
+    if (a > 10 {       // Falta el paréntesis de cierre en la condición
+        a = 0;
+    }                  // Error de bloque con paréntesis
+
+    return;            // Retorno en una función void (correcto, pero revisar)
 }
-@ // Carácter no reconocido
-/* Comentario sin cerrar
+
+int main() {
+    x = 20;
+    z = 'B'
+    testFunction();    // Falta punto y coma después de asignar 'z'
+    return 0
+}                      // Falta el punto y coma en varias líneas
