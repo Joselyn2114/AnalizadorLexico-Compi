@@ -5,10 +5,9 @@ import java_cup.runtime.Symbol;
 parser code
 {
     private Symbol s;
-    
+
     @Override
     public void syntax_error(Symbol s) {
-        this.s = s;
         System.err.println("Error de sintaxis en la línea " + s.left + ", columna " + s.right + ": " + s.value);
     }
 
@@ -31,48 +30,6 @@ precedence left Multiplicacion, Division;
 
 start with INICIO;
 
-INICIO ::= 
+INICIO ::=
     Main Parentesis_a Parentesis_c Llave_a BLOQUE Llave_c
     | error { System.err.println("Error en la estructura principal del programa."); }
-;
-
-BLOQUE ::= 
-    BLOQUE SENTENCIA
-    | SENTENCIA
-;
-
-SENTENCIA ::= 
-    DECLARACION
-    | IF_ELSE
-    | BUCLE
-    | Return EXPRESION P_coma
-    | Identificador Igual EXPRESION P_coma
-    | error { System.err.println("Error en una sentencia."); }
-;
-
-DECLARACION ::= 
-    T_dato Identificador Igual EXPRESION P_coma
-    | T_dato Identificador P_coma
-    | error { System.err.println("Error en la declaración de variable."); }
-;
-
-IF_ELSE ::= 
-    If Parentesis_a EXPRESION Parentesis_c Llave_a BLOQUE Llave_c
-    | If Parentesis_a EXPRESION Parentesis_c Llave_a BLOQUE Llave_c Else Llave_a BLOQUE Llave_c
-    | error { System.err.println("Error en la estructura del if/else."); }
-;
-
-BUCLE ::= 
-    While Parentesis_a EXPRESION Parentesis_c Llave_a BLOQUE Llave_c
-    | Do Llave_a BLOQUE Llave_c While Parentesis_a EXPRESION Parentesis_c P_coma
-    | For Parentesis_a SENTENCIA P_coma EXPRESION P_coma SENTENCIA Parentesis_c Llave_a BLOQUE Llave_c
-    | error { System.err.println("Error en la estructura del bucle."); }
-;
-
-EXPRESION ::= 
-    Identificador
-    | Numero
-    | EXPRESION Suma EXPRESION
-    | EXPRESION Multiplicacion EXPRESION
-    | error { System.err.println("Error en una expresión."); }
-;

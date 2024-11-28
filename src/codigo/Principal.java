@@ -23,14 +23,14 @@ public class Principal {
         generar(ruta1, ruta2, rutaS);
     }
     public static void generar(String ruta1, String ruta2, String[] rutaS) throws IOException, Exception{
-        File archivo;
-        archivo = new File(ruta1);
-        JFlex.Main.generate(archivo);
+        //File archivo;
+        //archivo = new File(ruta1);
+        //JFlex.Main.generate(archivo);
         //archivo = new File(ruta2);
         //JFlex.Main.generate(archivo);
         java_cup.Main.main(rutaS);
         
-        Path rutaSym = Paths.get("C:/AnalizadorLexicoNetBeans/AnalizadorLexico/src/codigo/sym.java");
+        Path rutaSym = Paths.get("D:/Downloads/Parser (1)/Parser/AnalizadorLexicoNetBeans/AnalizadorLexico/src/codigo/sym.java");
         if (Files.exists(rutaSym)) {
             Files.delete(rutaSym);
         }

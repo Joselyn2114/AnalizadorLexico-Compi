@@ -13,6 +13,8 @@ import codigo.Sintax.Sintax;
 import codigo.lexer.LexicalAnalyzer;
 import codigo.lexer.Lexer;
 import codigo.lexer.TokenType;
+import codigo.translator.SymbolTableEntry;
+import codigo.translator.Translator;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,6 +29,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -39,12 +45,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
-        initComponents();
-        this.setLocationRelativeTo(null);
-    } 
+        initComponents(); // Genera la interfaz gráfica automáticamente
+        this.setLocationRelativeTo(null); // Centra la ventana en la pantalla
+
+        // Envolver el contenido en un JScrollPane
+        JScrollPane mainScrollPane = new JScrollPane(getContentPane());
+        setContentPane(mainScrollPane);
+
+        // Ajustar el tamaño de la ventana al contenido
+        pack();
+    }
+
     
 private void analizarLexico() throws IOException {
-    //Lexer lexer = new Lexer(new StringReader(txtResultado.getText()));
     Lexer lexer = new Lexer(new StringReader(txtResultado.getText()));
     LexicalAnalyzer analyzer = new LexicalAnalyzer(lexer);
     TokenProcessor processor = new TokenProcessor();
@@ -56,8 +69,45 @@ private void analizarLexico() throws IOException {
     }
 
     String resultado = processor.processTokens(tokens);
-    txtAnalizarLex.setText(resultado);
+    //txtAnalizarLex.setText(resultado);
+
+    updateLexicalTableModel(tokens);
 }
+
+
+private void generarCodigo() {
+    Lexer lexer = new Lexer(new StringReader(txtResultado.getText()));
+    List<Token> tokens = new ArrayList<>();
+    Token token;
+    LexicalAnalyzer analyzer;
+    try {
+        analyzer = new LexicalAnalyzer(lexer);
+        while ((token = analyzer.nextToken()) != null) {
+            tokens.add(token);
+        }
+        Translator translator = new Translator(tokens, this.filePath + this.ASSEMBLY_FILE_EXT);
+        translator.translate();
+        
+        updateSymbolTableModel(translator.getSymbolTable());
+
+        JOptionPane.showMessageDialog(
+            null, 
+            "El código ensamblador se generó exitosamente.\nUbicación: " + this.filePath + this.ASSEMBLY_FILE_EXT,
+            "Generación Exitosa",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(
+            null, 
+            "Ocurrió un error durante la generación del código ensamblador.\nDetalles: " + ex.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE
+        );
+        Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,10 +122,13 @@ private void analizarLexico() throws IOException {
         btnArchivo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtResultado = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtAnalizarLex = new javax.swing.JTextArea();
         btnAnalizarLex = new javax.swing.JButton();
         btnLimpiarLex = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAnalizarSin = new javax.swing.JTextArea();
@@ -86,10 +139,11 @@ private void analizarLexico() throws IOException {
         txtAnalizarSem = new javax.swing.JTextArea();
         btnAnalizarSemantico = new javax.swing.JButton();
         btnLimpiarSemantico = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
         btnGenerarCodEnsamblador = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
+        setSize(new java.awt.Dimension(720, 1080));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Analizador Lexico", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
@@ -104,11 +158,6 @@ private void analizarLexico() throws IOException {
         txtResultado.setColumns(20);
         txtResultado.setRows(5);
         jScrollPane1.setViewportView(txtResultado);
-
-        txtAnalizarLex.setEditable(false);
-        txtAnalizarLex.setColumns(20);
-        txtAnalizarLex.setRows(5);
-        jScrollPane2.setViewportView(txtAnalizarLex);
 
         btnAnalizarLex.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnAnalizarLex.setText("Analizar");
@@ -126,39 +175,94 @@ private void analizarLexico() throws IOException {
             }
         });
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Tabla de Símbolos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Nombre", "Tipo", "Ámbito"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(jTable1);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(154, 154, 154))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Tipo de Token", "Token", "Línea"
+            }
+        ));
+        jScrollPane6.setViewportView(jTable2);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 240, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAnalizarLex)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(167, 167, 167)
                         .addComponent(btnLimpiarLex))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(386, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnArchivo)
-                    .addComponent(btnAnalizarLex)
-                    .addComponent(btnLimpiarLex))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 50, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnArchivo)
+                            .addComponent(btnAnalizarLex)
+                            .addComponent(btnLimpiarLex))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Analizador Sintactico", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
@@ -195,7 +299,8 @@ private void analizarLexico() throws IOException {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnAnalizarSin)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLimpiarSin))))
+                        .addComponent(btnLimpiarSin)
+                        .addGap(22, 22, 22))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,33 +337,6 @@ private void analizarLexico() throws IOException {
             }
         });
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Generador de código ensamblador", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
-
-        btnGenerarCodEnsamblador.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnGenerarCodEnsamblador.setText("Generar código ensamblador");
-        btnGenerarCodEnsamblador.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerarCodEnsambladorActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(210, 210, 210)
-                .addComponent(btnGenerarCodEnsamblador)
-                .addContainerGap(220, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(btnGenerarCodEnsamblador)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -266,14 +344,12 @@ private void analizarLexico() throws IOException {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(btnAnalizarSemantico)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLimpiarSemantico))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addComponent(btnLimpiarSemantico)
+                        .addGap(21, 21, 21))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,25 +360,39 @@ private void analizarLexico() throws IOException {
                     .addComponent(btnLimpiarSemantico))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(85, 85, 85))
         );
+
+        btnGenerarCodEnsamblador.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnGenerarCodEnsamblador.setText("Generar código ensamblador");
+        btnGenerarCodEnsamblador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarCodEnsambladorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(507, 507, 507)
+                .addComponent(btnGenerarCodEnsamblador)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGenerarCodEnsamblador)
+                .addGap(44, 44, 44)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -317,6 +407,8 @@ private void analizarLexico() throws IOException {
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(null);
         File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
+        this.filename = archivo.getName();
+        this.filePath = chooser.getSelectedFile().getAbsolutePath();
         
         try {
             String ST = new String(Files.readAllBytes(archivo.toPath()));
@@ -330,7 +422,10 @@ private void analizarLexico() throws IOException {
 
     private void btnLimpiarLexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarLexActionPerformed
         // TODO add your handling code here:
-        txtAnalizarLex.setText(null);
+        //txtAnalizarLex.setText(null);
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+
+        model.setRowCount(0);
     }//GEN-LAST:event_btnLimpiarLexActionPerformed
 
     private void btnLimpiarSinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarSinActionPerformed
@@ -421,23 +516,32 @@ private void analizarLexico() throws IOException {
         }
     }//GEN-LAST:event_btnAnalizarSinActionPerformed
 
+    private void btnGenerarCodEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarCodEnsambladorActionPerformed
+        // TODO add your handling code here:
+        this.generarCodigo();
+    }//GEN-LAST:event_btnGenerarCodEnsambladorActionPerformed
+
+    private void btnLimpiarSemanticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarSemanticoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimpiarSemanticoActionPerformed
+
     private void btnAnalizarSemanticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarSemanticoActionPerformed
-        try {                                                     
+        try {
             String ST = txtResultado.getText();  // Obtener el texto de entrada del JTextArea
             List<SemanticError> erroresSemanticos = new ArrayList<>();  // Lista para recolectar errores semánticos
-            
+
             // Crear el lexer y parser
             Lexer lexer = new Lexer(new StringReader(ST));
             LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(lexer);
             Sintax parser = new Sintax(new codigo.lexer.LexerCup(new StringReader(ST)));
-            
+
             // Crear el analizador semántico y la tabla de símbolos
             SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer();
-            
+
             try {
                 // Ejecutar el análisis sintáctico y semántico
                 parser.parse();
-                
+
                 // Realizar el análisis léxico y agregar tokens a la tabla de símbolos
                 Token token;
                 while ((token = lexicalAnalyzer.nextToken()) != null) {
@@ -451,14 +555,14 @@ private void analizarLexico() throws IOException {
                         semanticAnalyzer.checkContinueUsage(token.getLine());
                     }
                 }
-                
+
                 // Ejecutar optimizaciones
                 semanticAnalyzer.checkConstantFolding(null, 0);  // Implementación de ejemplo
                 semanticAnalyzer.checkConstantPropagation();
-                
+
                 // Obtener errores semánticos y agregarlos a la lista
                 erroresSemanticos.addAll(semanticAnalyzer.getErrors());
-                
+
                 // Mostrar los errores semánticos en el JTextField
                 if (erroresSemanticos.isEmpty()) {
                     txtAnalizarSem.setText("Análisis semántico realizado correctamente. No se encontraron errores.");
@@ -481,14 +585,67 @@ private void analizarLexico() throws IOException {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAnalizarSemanticoActionPerformed
+    
+    private void updateLexicalTableModel(List<Token> tokens) {
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
 
-    private void btnLimpiarSemanticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarSemanticoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLimpiarSemanticoActionPerformed
+        // Limpia la tabla antes de llenarla nuevamente
+        model.setRowCount(0);
 
-    private void btnGenerarCodEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarCodEnsambladorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGenerarCodEnsambladorActionPerformed
+        // Llena los datos en la tabla, incluyendo la nueva columna de líneas
+        for (Token token : tokens) {
+            model.addRow(new Object[]{
+                token.getType(),   // Tipo de token
+                token.getLexeme(), // Identificador del token
+                token.getLine() + 1   // Línea donde aparece el token
+            });
+        }
+    }
+
+    
+    private void displaySymbolTable(List<SymbolTableEntry> symbolTable) {
+    // Columnas de la tabla
+    String[] columnNames = {"Nombre", "Tipo", "Ámbito"};
+
+    // Datos de la tabla
+    String[][] data = new String[symbolTable.size()][3];
+    for (int i = 0; i < symbolTable.size(); i++) {
+        SymbolTableEntry entry = symbolTable.get(i);
+        data[i][0] = entry.getName();
+        data[i][1] = entry.getType();
+        data[i][2] = entry.getScope();
+    }
+
+    JTable table = new JTable(data, columnNames);
+    table.setEnabled(false);
+
+    JScrollPane scrollPane = new JScrollPane(table);
+    JOptionPane.showMessageDialog(
+            null,
+            scrollPane,
+            "Tabla de Símbolos",
+            JOptionPane.INFORMATION_MESSAGE
+    );
+}
+
+    private void updateSymbolTableModel(List<SymbolTableEntry> symbolTable) {
+    // Obtener el modelo actual de la tabla
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    
+    // Limpiar cualquier dato existente
+    model.setRowCount(0);
+
+    // Agregar las filas desde la lista de la tabla de símbolos
+    for (SymbolTableEntry entry : symbolTable) {
+        model.addRow(new Object[]{
+            entry.getName(),
+            entry.getType(),
+            entry.getScope()
+        });
+    }
+}
+
+    
     
     /**
      * @param args the command line arguments
@@ -525,6 +682,11 @@ private void analizarLexico() throws IOException {
         });
     }
 
+    private String filename;
+    private final String ASSEMBLY_FILE_EXT = ".asm";
+    private String filePath;
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnalizarLex;
     private javax.swing.JButton btnAnalizarSemantico;
@@ -537,12 +699,14 @@ private void analizarLexico() throws IOException {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea txtAnalizarLex;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTextArea txtAnalizarSem;
     private javax.swing.JTextArea txtAnalizarSin;
     private javax.swing.JTextArea txtResultado;
